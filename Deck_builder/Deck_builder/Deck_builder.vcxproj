@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{B3F7AEE9-4AB5-424D-85C3-2458476E63D0}</ProjectGuid>
+    <ProjectGuid>{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Deckbuilder</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
@@ -150,17 +150,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Dropbox\LolGui\Projet M2\Codes\Code\Graph.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Edge.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Dropbox\LolGui\Projet M2\Codes\Code\Graph.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Deck_builder.cpp" />
     <ClCompile Include="Edge.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

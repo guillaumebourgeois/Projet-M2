@@ -27,7 +27,7 @@
     <ClInclude Include="Edge.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Dropbox\LolGui\Projet M2\Codes\Code\Graph.h">
+    <ClInclude Include="Graph.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClCompile Include="Edge.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Dropbox\LolGui\Projet M2\Codes\Code\Graph.cpp">
+    <ClCompile Include="Graph.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
