@@ -13,24 +13,25 @@ using namespace std;
 class Card
 {
 public:
-	static int currentId;
-	const int idCard;
+	//static int currentId;
+	
+	int idCard;
 	string name;
 
-	int* colors;
-	int* types;
-	int* capacities;
-	int* manaCostes;
-	int edition;
-	int popularity;
+	__int8* colors;
+	//int* types;
+	//int* capacities;
+	//int* manaCostes;
+	//int edition;
+	//int popularity;
 
-	string text;
+	//string text;
 
-	float power;
-	float toughness;
+	//float power;
+	//float toughness;
 
 	Card();
-	Card(string, int[]);
+	Card(int, string, __int8[]);
 	~Card();
 };
 

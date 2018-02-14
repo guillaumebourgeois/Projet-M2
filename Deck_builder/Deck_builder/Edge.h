@@ -13,21 +13,21 @@ using namespace std;
 class Edge
 {
 public:
-	static int currentId;
+	//static int currentId;
 	int idEdge;
 	int idCard1;
 	int idCard2;
-
-	int colorValue;
-	int typeValue;
-	int capacityValue;
-	int manacostValue;
-	int editionValue;
-	int popularityValue;
-	int totalValue;
+	
+	__int8 colorValue;
+	//int typeValue;
+	//int capacityValue;
+	//int manacostValue;
+	//int editionValue;
+	//int popularityValue;
+	__int8 totalValue;
 
 	Edge();
-	Edge(Card*, Card*, int /*, int, int, int, int, int */);
+	Edge(Card*, Card*, __int8 /*, int, int, int, int, int */);
 	~Edge();
 };
 

@@ -46,3 +46,7 @@ Dans l'interface web, demander à l'utilisateur seulement la carte de départ ? 
 ************************************************************************************************** Liens utiles 
 
 - https://dev.mysql.com/doc/connector-cpp/en/connector-cpp-apps-windows-visual-studio.html
+
+************************************************************************************************** Problèmes rencontrés 
+- 17 847 cartes ==> potentiellement 318 515 409 arêtes ==> mémoire ?
+	- A savoir qu'il y a seulement 16,85% d'arêtes par rapport à un graphe complet

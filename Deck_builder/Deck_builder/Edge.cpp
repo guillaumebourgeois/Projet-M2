@@ -6,13 +6,13 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
-int Edge::currentId = 1;
+//int Edge::currentId = 1;
 
-Edge::Edge() : idEdge(currentId++)
+Edge::Edge() /*: idEdge(currentId++)*/
 {
 }
 
-Edge::Edge(Card* c1, Card* c2, int color /*, int type, int capacity, int manacost, int edition, int popularity */) : idEdge(currentId++)
+Edge::Edge(Card* c1, Card* c2, __int8 color /*, int type, int capacity, int manacost, int edition, int popularity */) /*: idEdge(currentId++)*/
 {
 	this->idCard1 = c1->idCard;
 	this->idCard2 = c2->idCard;

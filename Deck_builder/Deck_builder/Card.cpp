@@ -8,17 +8,18 @@ Projet - Magic cards
 
 using namespace std;
 
-int Card::currentId = 1;
+//int Card::currentId = 1;
 
-Card::Card() : idCard(currentId++)
+Card::Card() /*: idCard(currentId++)*/
 {
 
 }
 
-Card::Card(string name, int colors[]) : idCard(currentId++)
+Card::Card(int idCard, string name, __int8 colors[]) /*: idCard(currentId++)*/
 {
+	this->idCard = idCard;
 	this->name = name;
-	this->colors = new int[5];
+	this->colors = new __int8[5];
 	this->colors = colors;
 }
 
