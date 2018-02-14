@@ -1,0 +1,48 @@
+﻿************************************************************************************************** Règles et caractéristiques
+
+Cartes :
+- 5 couleurs possibles : W (blanc), U (bleu), B (noir), R (rouge), G (vert)
+- Differents types de carte (table : mag_cardtype)
+
+Règles sur le deck :
+- Pas plus de 4 fois la meme carte dans le deck
+
+Début de partie : 
+- 7 cartes aléatoire du deck dans la main
+- 20 HP
+- 0 mana
+
+A chaque tour :
+- Piocher
+- Mal d'invocation sur les creatures
+- Engagement des cartes
+- annonces attaquant/defenseur
+
+
+************************************************************************************************** Développement
+
+Génération de plusieurs graphes à partir de la base de données en fonction de :
+- la couleur
+- le type
+- la capacité
+- le cout (en mana)
+- l'édition
+- la popularité
+
+Pour le graphe global, plusieurs possibilités :
+- Plusieurs arretes entre les sommets (une pour chaque parametre)
+- Une arrete unique entre les sommets (addition de toutes les valeurs)
+- Une arrete unique entre plusieurs sommet -> équivalent à un talbeau par parametre
+
+Interface web
+
+
+************************************************************************************************** Idées ?
+
+Popularité -> Statistiques sur les cartes efficaces sur les cartes populaires (puisque souvent utilisées)
+
+Dans l'interface web, demander à l'utilisateur seulement la carte de départ ? Ou plusieurs ? Ou une couleur ou deux avec lesquelles il veut jouer ?
+
+************************************************************************************************** Liens utiles 
+
+- https://dev.mysql.com/doc/connector-cpp/en/connector-cpp-apps-windows-visual-studio.html
