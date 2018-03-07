@@ -41,11 +41,12 @@ void Graph::addEdge(Edge edge)
 	//this->adjacencyMatrix[edge.idCard1][edge.idCard2] = edge.idEdge;
 }
 
+
 void Graph::printGraph()
 {
-	/*for (int i = 0; i < this->edges.size(); i++) {
-		cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
-	}
+	//for (int i = 0; i < this->edges.size(); i++) {
+		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 /*<< " ; Valeur : " << this->edges[i].colorValue*/ << endl;
+	//}
 
-	cout << "Total : " << this->edges.size() << " liens." << endl;*/
+	cout << "Total : " << this->edges.size() << " liens." << endl;
 }

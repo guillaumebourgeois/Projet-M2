@@ -50,3 +50,48 @@ Dans l'interface web, demander à l'utilisateur seulement la carte de départ ? 
 ************************************************************************************************** Problèmes rencontrés 
 - 17 847 cartes ==> potentiellement 318 515 409 arêtes ==> mémoire ?
 	- A savoir qu'il y a seulement 16,85% d'arêtes par rapport à un graphe complet
+
+
+
+Ajouter les cartes sans couleur
+
+Pour un concours :
+3 derniers blocs ==> 6 dernières éditions
+340-350 cartes par édition
+
+==> Liens pour éditions
+
+
+
+CSR CSC 
+Compress par row 
+Compress par column
+
+
+A faire :
+- EXTRAIRE LES TYPES LAND ET SOUS TYPE BASIC DE LA BDD (~15000 cartes) : dans la requète
+- Changer l'implémentation 
+	Matrice 1D (vector)
+- Compte rendu à faire : (1-2 pages)
+	- Ce qu'on a fait
+	- Ce dont on a parlé 
+	- Ce qu'on doit faire pour la suite
+- Inclure les autres critères : (sauf popularité)
+	Valeur total : SOMME(valeur*cohéficient)
+- Problème d'otimisation :
+	- Plus court chemin/Plus procheS voisinS
+	- Réfléchir à plusieurs types d'algo, les présenter, les implémenter si le temps
+
+PLUS COURT CHEMIN/PLUS PROCHES VOISINS :
+- Paramètres :
+	- x : Nombre de cartes de départ
+	- n : Taille de l'ensemble de cartes que l'on veut proposer
+- EXCLURE LES MANA/TERRAINS/LAND
+- Trouver les n plus proche voisins
+
+Pour plusieurs cartes : 
+- n plus proches voisins communs
+- Donner une valeur à la distance entre une carte précise et les n propositions
+- Ensemble de cartes : recalcul de la matrice
+
+En entrée/sortie : Fichier avec les id des cartes
