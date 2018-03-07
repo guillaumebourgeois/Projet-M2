@@ -10,43 +10,58 @@ Graph::Graph()
 {
 }
 
-Graph::Graph(int size)
+Graph::Graph(int nbCards)
 {
-	this->adjacencyMatrix = (int**)malloc(size * sizeof(int));
-	for (int i = 0; i < size; i++) {
-		this->adjacencyMatrix[i] = (int*)malloc(size * sizeof(int));
+	this->nbCards = nbCards;
+	this->Edges.resize(nbCards*nbCards);
+}
+
+void Graph::addEdge(Edge e)
+{
+	this->Edges.push_back(e);
+}
+
+__int8 Graph::matchingColors(Card c1, Card c2)
+{
+	__int8 nbCommons = 0;
+	__int8 nbColorc1 = 0;
+	__int8 nbColorc2 = 0;
+
+	for (int i = 0; i < 5; ++i) {
+		if (c1.colors[i] == 1 && c1.colors[i] == c2.colors[i]) {
+			++nbCommons;
+			++nbColorc1;
+			++nbColorc2;
+		}
+		if (c1.colors[i] == 1) {
+			++nbColorc1;
+		}
+		if (c2.colors[i] == 1) {
+			++nbColorc2;
+		}
+	}
+	if (nbCommons == 0) {
+		return 0;
+	}
+	else {
+		return (5 - (max(nbColorc1, nbColorc2) - nbCommons));
 	}
 }
 
-Graph::Graph(int size, Edge* edges)
+void Graph::printGraph()
 {
-	this->adjacencyMatrix = (int**)malloc(size * sizeof(int));
-	for (int i = 0; i < size; i++) {
-		this->adjacencyMatrix[i] = (int*)malloc(size * sizeof(int));
-	}
+	int cpt = 0;
 
-	for (int i = 0; i < (sizeof(edges) / sizeof(edges[0])); i++) {
-		this->edges.push_back(edges[i]);
+	for (int i = 0; i < this->Edges.size(); ++i) {
+		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
+		if (this->Edges[i].colorValue != 0)
+			++cpt;
+			//cout << unsigned(this->Edges[i].colorValue) << " ";
 	}
+	cout << "Total : " << cpt << " liens." << endl;
+	//cout << "Total : " << this->Edges.size() << " liens." << endl;
 }
 
 Graph::~Graph()
 {
-}
-
-void Graph::addEdge(Edge edge)
-{
-	this->edges.push_back(edge);
-	//cout << edge.idCard1 << " " << edge.idCard2 << " " << edge.idEdge << endl;
-	//this->adjacencyMatrix[edge.idCard1][edge.idCard2] = edge.idEdge;
-}
-
-
-void Graph::printGraph()
-{
-	//for (int i = 0; i < this->edges.size(); i++) {
-		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 /*<< " ; Valeur : " << this->edges[i].colorValue*/ << endl;
-	//}
-
-	cout << "Total : " << this->edges.size() << " liens." << endl;
 }

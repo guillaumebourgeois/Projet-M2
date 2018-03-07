@@ -13,15 +13,15 @@ using namespace std;
 class Graph
 {
 public:
-	vector<Edge> edges;
-	int** adjacencyMatrix;
+	int nbCards;
+	vector<Edge> Edges;
 
 	Graph();
 	Graph(int);
-	Graph(int, Edge*);
 	~Graph();
 
 	void addEdge(Edge);
+	__int8 matchingColors(Card, Card);
 	void printGraph();
 };
 

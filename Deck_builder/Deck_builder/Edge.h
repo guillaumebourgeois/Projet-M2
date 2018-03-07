@@ -13,11 +13,6 @@ using namespace std;
 class Edge
 {
 public:
-	//static int currentId;
-	int idEdge;
-	int idCard1;
-	int idCard2;
-	
 	__int8 colorValue;
 	//int typeValue;
 	//int capacityValue;
@@ -27,9 +22,6 @@ public:
 	__int8 totalValue;
 
 	Edge();
-	Edge(Card*, Card*, __int8 /*, int, int, int, int, int */);
+	Edge(__int8 /*, int, int, int, int, int */);
 	~Edge();
 };
-
-
-

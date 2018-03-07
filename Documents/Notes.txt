@@ -77,7 +77,7 @@ A faire :
 	- Ce dont on a parlé 
 	- Ce qu'on doit faire pour la suite
 - Inclure les autres critères : (sauf popularité)
-	Valeur total : SOMME(valeur*cohéficient)
+	Valeur total : SOMME(valeur*coefficient)
 - Problème d'otimisation :
 	- Plus court chemin/Plus procheS voisinS
 	- Réfléchir à plusieurs types d'algo, les présenter, les implémenter si le temps

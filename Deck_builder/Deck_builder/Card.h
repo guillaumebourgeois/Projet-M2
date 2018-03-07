@@ -31,7 +31,7 @@ public:
 	//float toughness;
 
 	Card();
-	Card(int, string, __int8[]);
+	Card(int, string, string);
 	~Card();
 };
 
