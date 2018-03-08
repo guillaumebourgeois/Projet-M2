@@ -8,15 +8,13 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
-using namespace std;
-
 class Card
 {
 	public:
 		int idCard;
-		string name;
+		std::string name;
 
-		__int8* colors;
+		std::array<__int8, NB_COLORS> colors;
 		__int8 type;
 		__int8 manaCost;
 		__int8 capacity;
@@ -27,10 +25,10 @@ class Card
 		//float toughness;
 
 		Card();
-		Card(int, string);
-		Card(int, string, string);
-		Card(int, string, string, __int8);
-		Card(int, string, string, __int8, __int8);
+		Card(int, std::string);
+		Card(int, std::string, std::string);
+		Card(int, std::string, std::string, __int8);
+		Card(int, std::string, std::string, __int8, __int8);
 		~Card();
 };
 

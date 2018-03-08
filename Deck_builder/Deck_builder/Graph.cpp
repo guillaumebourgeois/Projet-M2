@@ -6,6 +6,8 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
+using namespace std;
+
 Graph::Graph()
 {
 }
@@ -27,7 +29,7 @@ __int8 Graph::matchingColors(Card c1, Card c2)
 	__int8 nbColorc1 = 0;
 	__int8 nbColorc2 = 0;
 
-	for (int i = 0; i < 5; ++i) {
+	for (int i = 0; i < NB_COLORS; ++i) {
 		if (c1.colors[i] == 1 && c1.colors[i] == c2.colors[i]) {
 			++nbCommons;
 			++nbColorc1;

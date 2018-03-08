@@ -15,7 +15,6 @@ Card::Card()
 Card::Card(int idCard, string colorsString)
 {
 	this->idCard = idCard;
-	this->colors = new __int8[5];
 
 	if (colorsString.find("B") != -1)
 		colors[0] = 1;

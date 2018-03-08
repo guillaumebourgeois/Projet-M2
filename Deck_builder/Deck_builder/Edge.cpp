@@ -6,6 +6,8 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
+using namespace std;
+
 Edge::Edge()
 {
 	this->colorValue = -1;

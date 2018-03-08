@@ -8,8 +8,6 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
-using namespace std;
-
 class Edge
 {
 	public:

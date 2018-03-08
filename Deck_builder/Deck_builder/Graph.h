@@ -8,13 +8,11 @@ Projet - Magic cards
 
 #include "stdafx.h"
 
-using namespace std;
-
 class Graph
 {
 	public:
 		int nbCards;
-		vector<Edge> Edges;
+		std::vector<Edge> Edges;
 
 		Graph();
 		Graph(int);
