@@ -12,16 +12,16 @@ using namespace std;
 
 class Edge
 {
-public:
-	__int8 colorValue;
-	//int typeValue;
-	//int capacityValue;
-	//int manacostValue;
-	//int editionValue;
-	//int popularityValue;
-	__int8 totalValue;
+	public:
+		__int8 colorValue;
+		//__int8 typeValue;
+		//__int8 capacityValue;
+		//__int8 manacostValue;
+		//__int8 editionValue;
 
-	Edge();
-	Edge(__int8 /*, int, int, int, int, int */);
-	~Edge();
+		__int8 totalValue;
+
+		Edge();
+		Edge(__int8 /*, int, int, int, int, int */);
+		~Edge();
 };

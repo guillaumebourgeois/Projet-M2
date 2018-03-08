@@ -27,7 +27,7 @@ Génération de plusieurs graphes à partir de la base de données en fonction d
 - la capacité
 - le cout (en mana)
 - l'édition
-- la popularité
+(- la popularité)
 
 Pour le graphe global, plusieurs possibilités :
 - Plusieurs arretes entre les sommets (une pour chaque parametre)
@@ -70,9 +70,9 @@ Compress par column
 
 A faire :
 - EXTRAIRE LES TYPES LAND ET SOUS TYPE BASIC DE LA BDD (~15000 cartes) : dans la requète
-- Changer l'implémentation 
+- Changer l'implémentation : OK
 	Matrice 1D (vector)
-- Compte rendu à faire : (1-2 pages)
+- Compte rendu à faire : (1-2 pages) : OK
 	- Ce qu'on a fait
 	- Ce dont on a parlé 
 	- Ce qu'on doit faire pour la suite

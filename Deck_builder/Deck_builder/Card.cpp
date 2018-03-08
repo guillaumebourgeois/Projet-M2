@@ -12,13 +12,11 @@ Card::Card()
 {
 }
 
-Card::Card(int idCard, string name, string colorsString)
+Card::Card(int idCard, string colorsString)
 {
-	
 	this->idCard = idCard;
-	this->name = name;
 	this->colors = new __int8[5];
-	
+
 	if (colorsString.find("B") != -1)
 		colors[0] = 1;
 	else
@@ -39,6 +37,21 @@ Card::Card(int idCard, string name, string colorsString)
 		colors[4] = 1;
 	else
 		colors[4] = 0;
+}
+
+Card::Card(int idCard, string name, string colorsString) : Card(idCard, name)
+{
+	this->name = name;
+}
+
+Card::Card(int idCard, string name, string colorsString, __int8 type) : Card (idCard, name, colorsString)
+{
+	this->type = type;
+}
+
+Card::Card(int idCard, string name, string colorsString, __int8 type, __int8 manaCost) : Card(idCard, name, colorsString, type)
+{
+	this->manaCost = manaCost;
 }
 
 Card::~Card()

@@ -12,16 +12,16 @@ using namespace std;
 
 class Graph
 {
-public:
-	int nbCards;
-	vector<Edge> Edges;
+	public:
+		int nbCards;
+		vector<Edge> Edges;
 
-	Graph();
-	Graph(int);
-	~Graph();
+		Graph();
+		Graph(int);
+		~Graph();
 
-	void addEdge(Edge);
-	__int8 matchingColors(Card, Card);
-	void printGraph();
+		void addEdge(Edge);
+		__int8 matchingColors(Card, Card);
+		void printGraph();
 };
 

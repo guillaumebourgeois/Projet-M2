@@ -8,7 +8,9 @@ Projet - Magic cards
 
 Edge::Edge()
 {
-	this->colorValue = 0;
+	this->colorValue = -1;
+	//this->typeValue = 0;
+	//this->capacityValue = 0;
 	this->totalValue = 0;
 }
 
