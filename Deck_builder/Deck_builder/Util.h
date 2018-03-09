@@ -10,4 +10,5 @@ Projet - Magic cards
 
 
 std::vector<int> readFile();
-void writeFile();
+
+void writeFile(std::vector<int>);

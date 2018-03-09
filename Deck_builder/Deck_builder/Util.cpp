@@ -54,7 +54,43 @@ vector<int> readFile()
 	return ids;
 }
 
-void writeFile()
+void writeFile(vector<int> ids)
 {
+	int res;
 
+	OPENFILENAME ofn;
+	TCHAR tmp[1024];
+	tmp[0] = '\0';
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
+
+	ofn.lStructSize = sizeof(OPENFILENAMEW);
+	ofn.lpstrFile = tmp;
+	ofn.nMaxFile = 1024;
+	ofn.lpstrTitle = _T("Deck Builder");
+	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
+	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
+	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
+
+	//res = GetOpenFileName(&ofn);
+	res = GetSaveFileName(&ofn); 
+	printf("Code de sortie : %d\n", res);
+	//convert_multiple(ofn.lpstrFile);
+
+	if (ofn.lpstrFile != nullptr)
+	{
+		_tprintf(_T("Enregistrement dans le fichier fichier : %s\n"), ofn.lpstrFile);
+
+		ofstream file(ofn.lpstrFile, ios::out | ios::trunc); 
+
+		if (file)
+		{
+			for (int i = 0; i < ids.size(); ++i)
+				file << ids[i] << endl;
+
+			file.close();
+		}
+		else
+			cerr << "Erreur lors de l'ouverture du fichier !" << endl;
+	}
 }

@@ -53,6 +53,11 @@ Card::Card(int idCard, string name, string colorsString, __int8 type, __int8 man
 	this->manaCost = manaCost;
 }
 
+Card::Card(int idCard, string name, string colorsString, __int8 type, __int8 manaCost, int edition) : Card(idCard, name, colorsString, type, manaCost)
+{
+	this->edition = edition;
+}
+
 Card::~Card()
 {
 }

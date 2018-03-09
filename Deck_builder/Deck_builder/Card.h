@@ -21,14 +21,12 @@ class Card
 		int edition;
 		//int popularity;
 
-		//float power;
-		//float toughness;
-
 		Card();
 		Card(int, std::string);
 		Card(int, std::string, std::string);
 		Card(int, std::string, std::string, __int8);
 		Card(int, std::string, std::string, __int8, __int8);
+		Card(int, std::string, std::string, __int8, __int8, int);
 		~Card();
 };
 

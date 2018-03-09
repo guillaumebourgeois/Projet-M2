@@ -50,14 +50,30 @@ __int8 Graph::matchingColors(Card c1, Card c2)
 	}
 }
 
+void Graph::createEdges(vector<Card> Cards)
+{
+	int n = this->nbCards;
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			if (i != j)
+				this->Edges[i*nbCards + j].colorValue = this->matchingColors(Cards[i], Cards[j]);
+		}
+	}
+}
+
 void Graph::printGraph()
 {
+	int val;
 	for (int i = 0; i < this->Edges.size(); ++i) {
+		val = this->Edges[i].colorValue;
 		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
-		//if (this->Edges[i].colorValue != 0)
-			//cout << unsigned(this->Edges[i].colorValue) << " ";
+		if (val != 0)
+			cout << val << " ";
 		//cout << unsigned(this->Edges[i].totalValue) << " ";
 	}
+
+	//cout << "nbCards : " << this->nbCards << endl;
 	//cout << "Total : " << this->Edges.size() << " liens." << endl;
 }
 
