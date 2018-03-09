@@ -15,6 +15,7 @@ class Card
 		std::string name;
 
 		std::bitset<NB_COLORS> colors {0b00000};
+		__int16 subtype;
 		__int8 type;
 		__int8 manaCost;
 		__int8 capacity;
@@ -24,9 +25,10 @@ class Card
 		Card();
 		Card(int, std::string);
 		Card(int, std::string, std::string);
-		Card(int, std::string, std::string, __int8);
-		Card(int, std::string, std::string, __int8, __int8);
-		Card(int, std::string, std::string, __int8, __int8, int);
+		Card(int, std::string, std::string, __int16);
+		Card(int, std::string, std::string, __int16, __int8);
+		Card(int, std::string, std::string, __int16, __int8, __int8);
+		Card(int, std::string, std::string, __int16, __int8, __int8, int);
 		~Card();
 };
 
