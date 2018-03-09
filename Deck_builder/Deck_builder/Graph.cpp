@@ -25,29 +25,18 @@ void Graph::addEdge(Edge e)
 
 __int8 Graph::matchingColors(Card c1, Card c2)
 {
-	__int8 nbCommons = 0;
-	__int8 nbColorc1 = 0;
-	__int8 nbColorc2 = 0;
+	bitset<5> nbCommonsBits = c1.colors & c2.colors;
 
-	for (int i = 0; i < NB_COLORS; ++i) {
-		if (c1.colors[i] == 1 && c1.colors[i] == c2.colors[i]) {
-			++nbCommons;
-			++nbColorc1;
-			++nbColorc2;
-		}
-		if (c1.colors[i] == 1) {
-			++nbColorc1;
-		}
-		if (c2.colors[i] == 1) {
-			++nbColorc2;
-		}
-	}
-	if (nbCommons == 0) {
+	int commons = nbCommonsBits.count();
+	int nbColorc1 = c1.colors.count();
+	int nbColorc2 = c2.colors.count();
+
+	if (commons == 0)
 		return 0;
-	}
-	else {
-		return (5 - (max(nbColorc1, nbColorc2) - nbCommons));
-	}
+	else if (nbColorc1 == 0 || nbColorc2 == 0)
+		return 3;
+	else
+		return (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
 }
 
 void Graph::createEdges(vector<Card> Cards)
@@ -68,7 +57,7 @@ void Graph::printGraph()
 	for (int i = 0; i < this->Edges.size(); ++i) {
 		val = this->Edges[i].colorValue;
 		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
-		if (val != 0)
+		if (val != 0 && val != -1)
 			cout << val << " ";
 		//cout << unsigned(this->Edges[i].totalValue) << " ";
 	}

@@ -31,7 +31,7 @@ vector<int> readFile()
 
 	res = GetOpenFileName(&ofn);
 	//int res = GetSaveFileName(&ofn); 
-	printf("Code de sortie : %d\n", res);
+	//printf("Code de sortie : %d\n", res);
 	//convert_multiple(ofn.lpstrFile);
 
 	if (ofn.lpstrFile != nullptr)
@@ -74,7 +74,7 @@ void writeFile(vector<int> ids)
 
 	//res = GetOpenFileName(&ofn);
 	res = GetSaveFileName(&ofn); 
-	printf("Code de sortie : %d\n", res);
+	//printf("Code de sortie : %d\n", res);
 	//convert_multiple(ofn.lpstrFile);
 
 	if (ofn.lpstrFile != nullptr)

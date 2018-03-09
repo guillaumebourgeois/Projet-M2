@@ -17,25 +17,29 @@ Card::Card(int idCard, string colorsString)
 	this->idCard = idCard;
 
 	if (colorsString.find("B") != -1)
-		colors[0] = 1;
+		this->colors[0] = true;
 	else
-		colors[0] = 0;
+		this->colors[0] = false;
+
 	if (colorsString.find("G") != -1)
-		colors[1] = 1;
+		this->colors[1] = true;
 	else
-		colors[1] = 0;
+		this->colors[1] = false;
+
 	if (colorsString.find("R") != -1)
-		colors[2] = 1;
+		this->colors[2] = true;
 	else
-		colors[2] = 0;
+		this->colors[2] = false;
+	
 	if (colorsString.find("U") != -1)
-		colors[3] = 1;
+		this->colors[3] = true;
 	else
-		colors[3] = 0;
+		this->colors[3] = false;
+	
 	if (colorsString.find("W") != -1)
-		colors[4] = 1;
+		this->colors[4] = true;
 	else
-		colors[4] = 0;
+		this->colors[4] = false;
 }
 
 Card::Card(int idCard, string name, string colorsString) : Card(idCard, name)

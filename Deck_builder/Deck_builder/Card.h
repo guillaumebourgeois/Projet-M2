@@ -14,7 +14,7 @@ class Card
 		int idCard;
 		std::string name;
 
-		std::array<__int8, NB_COLORS> colors;
+		std::bitset<NB_COLORS> colors {0b00000};
 		__int8 type;
 		__int8 manaCost;
 		__int8 capacity;
