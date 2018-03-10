@@ -27,9 +27,9 @@ __int8 Graph::matchingColors(Card c1, Card c2)
 {
 	bitset<5> nbCommonsBits = c1.colors & c2.colors;
 
-	int commons = nbCommonsBits.count();
 	int nbColorc1 = c1.colors.count();
 	int nbColorc2 = c2.colors.count();
+	int commons = nbCommonsBits.count();
 
 	if (commons == 0)
 		return 0;

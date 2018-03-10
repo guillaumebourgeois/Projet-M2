@@ -47,23 +47,17 @@ Card::Card(int idCard, string name, string colorsString) : Card(idCard, name)
 	this->name = name;
 }
 
-Card::Card(int idCard, string name, string colorsString, __int16 subtype) : Card(idCard, name, colorsString)
-{
-	this->subtype = subtype;
-	//cout << idCard << " " << (int)subtype << endl;
-}
-
-Card::Card(int idCard, string name, string colorsString, __int16 subtype, __int8 type) : Card (idCard, name, colorsString, subtype)
+Card::Card(int idCard, string name, string colorsString, __int8 type) : Card (idCard, name, colorsString)
 {
 	this->type = type;
 }
 
-Card::Card(int idCard, string name, string colorsString, __int16 subtype, __int8 type, __int8 manaCost) : Card(idCard, name, colorsString, subtype, type)
+Card::Card(int idCard, string name, string colorsString, __int8 type, __int8 manaCost) : Card(idCard, name, colorsString, type)
 {
 	this->manaCost = manaCost;
 }
 
-Card::Card(int idCard, string name, string colorsString, __int16 subtype, __int8 type, __int8 manaCost, int edition) : Card(idCard, name, colorsString, subtype, type, manaCost)
+Card::Card(int idCard, string name, string colorsString, __int8 type, __int8 manaCost, int edition) : Card(idCard, name, colorsString, type, manaCost)
 {
 	this->edition = edition;
 }
