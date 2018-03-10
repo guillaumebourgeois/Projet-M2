@@ -42,7 +42,7 @@ __int8 Graph::matchingColors(Card c1, Card c2)
 void Graph::createEdges(vector<Card> Cards)
 {
 	int n = this->nbCards;
-
+	cout << n << endl;
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
 			if (i != j)

@@ -16,11 +16,11 @@ class Card
 
 		std::bitset<NB_COLORS> colors {0b00000};
 		__int8 manaCost;
-		std::vector<__int16> subtypes;
-		std::vector<__int8> types;
-		std::vector<__int8> capacities;
 		std::vector<__int16> blocs;
 		std::vector<__int16> editions;
+		std::vector<__int8> types;
+		std::vector<__int16> subtypes;
+		std::vector<__int8> capacities;
 		//int popularity;
 
 		Card();
@@ -28,4 +28,3 @@ class Card
 		Card(int, std::string, std::string, __int8);
 		~Card();
 };
-
