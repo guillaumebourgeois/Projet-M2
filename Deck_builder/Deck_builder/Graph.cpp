@@ -50,6 +50,7 @@ void Graph::createEdges(vector<Card> Cards)
 		for (int j = 0; j < n; ++j) {
 			if (i != j)
 			{
+				// COLORS
 				nbCommonsBits = Cards[i].colors & Cards[j].colors;
 
 				nbColorc1 = Cards[i].colors.count();
@@ -65,6 +66,12 @@ void Graph::createEdges(vector<Card> Cards)
 					this->Edges[i*nbCards + j].colorValue = (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
 
 				//this->Edges[i*nbCards + j].colorValue = this->matchingColors(Cards[i], Cards[j]);
+
+				// TYPES etc
+
+
+				// TOTAL
+				this->Edges[i*nbCards + j].totalValue = this->Edges[i*nbCards + j].colorValue * COEF_COLOR;
 			}
 		}
 	}
