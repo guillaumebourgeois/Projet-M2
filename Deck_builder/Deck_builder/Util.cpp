@@ -94,3 +94,18 @@ void writeFile(vector<int> ids)
 			cerr << "Erreur lors de l'ouverture du fichier !" << endl;
 	}
 }
+
+Card* usingDynamicGraph(Card*)
+{
+
+}
+
+Card* heavyNeighbour(Card*)
+{
+
+}
+
+Card* distanceSum(Card*)
+{
+	
+}
