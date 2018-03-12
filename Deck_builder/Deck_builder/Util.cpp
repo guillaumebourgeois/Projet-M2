@@ -95,17 +95,17 @@ void writeFile(vector<int> ids)
 	}
 }
 
-Card* usingDynamicGraph(Card* cards, int nbCards, std::vector<Edge> matrix)
+Card* usingDynamicGraph(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
 {
 
 }
 
-Card* heavyNeighbour(Card* cards, int nbCards, std::vector<Edge> matrix)
+Card* heavyNeighbour(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
 {
 
 }
 
-Card* distanceSum(Card* cards, int nbCards, std::vector<Edge> matrix)
+Card* distanceSum(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
 {
-
+	
 }
