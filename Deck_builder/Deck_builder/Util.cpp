@@ -50,7 +50,7 @@ vector<int> readFile()
 		else
 			cout << "Erreur lors de l'ouverture du fichier" << endl;
 	}
-	
+
 	return ids;
 }
 
@@ -72,8 +72,8 @@ void writeFile(vector<int> ids)
 	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
 	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
 
-	//res = GetOpenFileName(&ofn);
-	res = GetSaveFileName(&ofn); 
+											  //res = GetOpenFileName(&ofn);
+	res = GetSaveFileName(&ofn);
 	//printf("Code de sortie : %d\n", res);
 	//convert_multiple(ofn.lpstrFile);
 
@@ -81,7 +81,7 @@ void writeFile(vector<int> ids)
 	{
 		_tprintf(_T("Enregistrement dans le fichier fichier : %s\n"), ofn.lpstrFile);
 
-		ofstream file(ofn.lpstrFile, ios::out | ios::trunc); 
+		ofstream file(ofn.lpstrFile, ios::out | ios::trunc);
 
 		if (file)
 		{
@@ -95,17 +95,48 @@ void writeFile(vector<int> ids)
 	}
 }
 
-Card* usingDynamicGraph(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
+Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
 {
 
 }
 
-Card* heavyNeighbour(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
+Card* heavyNeighbour(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
 {
 
 }
 
-Card* distanceSum(std::vector<Card>, int nbCards, std::vector<Edge> matrix)
+int* distanceSum(std::vector<int> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
 {
-	
+	std::map<int, int> tmp;
+	std::map<int, int> res;
+	int *selectedCards = (int*)malloc(10 * sizeof(int));
+	int *max = (int*)calloc(10, sizeof(int));
+
+	for (int i : cards) {
+		for (Card j : allCards) {
+			if (tmp[j.idCard]) {
+				tmp[j.idCard] += matrix[ids.left.at(i) * allCards.size() + ids.left.at(j.idCard)].totalValue;
+			} else {
+				tmp[j.idCard] = matrix[ids.left.at(i) * allCards.size() + ids.left.at(j.idCard)].totalValue;
+			}
+		}
+	}
+
+	for (auto it : res) {
+		for (int i = 0; i < 10; i++) {
+			if (max[i] < it.second) {
+				max[i] = it.second;
+				res[i] = it.first;
+			}
+		}
+	}
+
+	for (int i = 0; i < 10; i++) {
+		selectedCards[i] = res[i];
+	}
+
+	free(max);
+	tmp.clear();
+	res.clear();
+	return selectedCards;
 }
