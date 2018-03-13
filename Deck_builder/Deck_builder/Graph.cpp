@@ -51,13 +51,10 @@ void Graph::createEdges(vector<Card> Cards)
 
 				if (commons == 0)
 					colorValue = 0;
-					//this->Edges[i*nbCards + j].colorValue = 0;
 				else if (nbColorc1 == 0 || nbColorc2 == 0)
 					colorValue = 3;
-					//this->Edges[i*nbCards + j].colorValue = 3;
 				else
 					colorValue = (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
-					//this->Edges[i*nbCards + j].colorValue = (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
 
 				// EDITION
 				editionValue = 0;
