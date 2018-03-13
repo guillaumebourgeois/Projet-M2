@@ -15,10 +15,10 @@ void writeFile(std::vector<int>);
 
 // Resolution algorithms 
 // Méthode de résolution incluant un graph dynamique dont le sommet de recherche de base est unique
-Card* usingDynamicGraph(std::vector<Card>, int, std::vector<Edge>); 
+Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids);
 
 // Méthode de résolution par voisin le plus proche (le plus lourd)
-Card* heavyNeighbour(std::vector<Card>, int, std::vector<Edge>);
+Card* heavyNeighbour(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids);
 
 // Méthode de résolution par calcul de distance entre chaque carte
-Card* distanceSum(std::vector<Card>, int, std::vector<Edge>);
+int* distanceSum(std::vector<int> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids);
