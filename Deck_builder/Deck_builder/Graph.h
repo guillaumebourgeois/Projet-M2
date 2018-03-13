@@ -19,7 +19,6 @@ class Graph
 		~Graph();
 
 		void addEdge(Edge);
-		__int8 matchingColors(Card, Card);
 
 		void createEdges(std::vector<Card>);
 
