@@ -11,15 +11,8 @@ Projet - Magic cards
 class Edge
 {
 	public:
-		//__int8 colorValue;
-		//__int8 typeValue;
-		//__int8 capacityValue;
-		//__int8 manacostValue;
-		//__int8 editionValue;
-
 		__int8 totalValue;
 
 		Edge();
-		//Edge(__int8 /*, int, int, int, int, int */);
 		~Edge();
 };
