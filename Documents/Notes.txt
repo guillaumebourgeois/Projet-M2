@@ -52,7 +52,7 @@ Dans l'interface web, demander à l'utilisateur seulement la carte de départ ? 
 	- A savoir qu'il y a seulement 16,85% d'arêtes par rapport à un graphe complet
 
 
-
+[REUNION 06/03/2018]
 Ajouter les cartes sans couleur
 
 Pour un concours :
@@ -60,7 +60,6 @@ Pour un concours :
 340-350 cartes par édition
 
 ==> Liens pour éditions
-
 
 
 CSR CSC 
@@ -95,3 +94,36 @@ Pour plusieurs cartes :
 - Ensemble de cartes : recalcul de la matrice
 
 En entrée/sortie : Fichier avec les id des cartes
+
+[REUNION 13/03/2018]
+
+A faire :
+- Visual/Interface interactifs
+	- Réfléchir aux solutions proposées 
+		- Visual C++
+		- PHP
+	- Cartes proposées
+	- Choisir carte
+	- Afficher le deck, chaque carte avec une partie de ses caractéristiques
+- Stats des algos 
+	- Histogrammes au fur et à mesure de déroulement de l'algo
+- Chercher une solution pour l'évaluation du deck
+	- Courbe de mana
+	- Types 
+- Affiner les caractéristiques
+
+-	Revoir evaluation editions
+-	Plus grand eventail pour le total
+
+[REUNION 20/03]
+- Terminer interface graphique
+
+
+
+
+
+
+[SOUTENANCE VENDREDI 30/03 14h]
+- Rapport écrit 
+- Soutenance orale (Présentation + démonstration)
+- Code

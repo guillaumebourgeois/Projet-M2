@@ -1,9 +1,10 @@
 /***
-Bellamy Lola & Bourgeois-Ducournau Guillaume
-M2 DAR - 2017/2018
-Projet - Magic cards
+	Bellamy Lola & Bourgeois-Ducournau Guillaume
+	M2 DAR - 2017/2018
+	Projet - Magic cards
 ***/
 
+#include "Card.h"
 #include "stdafx.h"
 
 using namespace std;
@@ -30,12 +31,12 @@ Card::Card(int idCard, string colorsString)
 		this->colors[2] = true;
 	else
 		this->colors[2] = false;
-	
+
 	if (colorsString.find("U") != -1)
 		this->colors[3] = true;
 	else
 		this->colors[3] = false;
-	
+
 	if (colorsString.find("W") != -1)
 		this->colors[4] = true;
 	else

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if test $# -lt 1; then
+echo "Usage: bdconvertCmp <input1.jpg> ... <inputn.jpg>" >&2
+exit 1
+fi
+
+old_IFS=$IFS
+IFS=$'\n'
+
+for ARG in "$@"
+do
+OUT=`echo "$ARG" | sed "s/\.jpg//"`
+
+echo "* Conversion $ARG en r_$OUT.jpg"
+convert -depth 24 "$ARG" "conv/$OUT.jpg"
+
+done
+
+IFS=$old_IFS
+

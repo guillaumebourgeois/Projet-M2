@@ -1,31 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Deck_builder", "Deck_builder\Deck_builder.vcxproj", "{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Deck_builder", "Deck_builder\Deck_builder.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Debug|x64.ActiveCfg = Debug|x64
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Debug|x64.Build.0 = Debug|x64
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Debug|x86.ActiveCfg = Debug|Win32
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Debug|x86.Build.0 = Debug|Win32
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Release|x64.ActiveCfg = Release|x64
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Release|x64.Build.0 = Release|x64
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Release|x86.ActiveCfg = Release|Win32
-		{C5A18DF5-1EF6-40BF-88A1-180C9FB459F4}.Release|x86.Build.0 = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.ActiveCfg = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.Build.0 = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B1307CC9-57F3-451B-B2F3-FB2D4BC21599}
+		SolutionGuid = {215D7EE0-A3BA-4BF8-A55B-3B024475220F}
 	EndGlobalSection
 EndGlobal

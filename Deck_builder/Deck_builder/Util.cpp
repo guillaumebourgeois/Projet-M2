@@ -1,7 +1,7 @@
 /***
-Bellamy Lola & Bourgeois-Ducournau Guillaume
-M2 DAR - 2017/2018
-Projet - Magic cards
+	Bellamy Lola & Bourgeois-Ducournau Guillaume
+	M2 DAR - 2017/2018
+	Projet - Magic cards
 ***/
 
 #pragma once
@@ -51,6 +51,55 @@ vector<int> readFile()
 			cout << "Erreur lors de l'ouverture du fichier" << endl;
 	}
 
+	try {
+		sql::Driver *driver;
+		sql::Connection *con;
+		sql::Statement *stmt;
+		sql::PreparedStatement *pstmt;
+		sql::ResultSet *res;
+
+		driver = get_driver_instance();
+		con = driver->connect(HOST, USER, PASS);
+		/* Connect to the MySQL database */
+		con->setSchema(DB);
+
+		stmt = con->createStatement();
+
+		// IDS 
+		pstmt = con->prepareStatement("SELECT sca_card, sca_multiverseid FROM mag_setcard WHERE sca_multiverseid IN (?)");
+		for (int i = 0; i < ids.size(); ++i)
+		{
+			pstmt->setInt(1, ids[i]);
+			pstmt->executeUpdate();
+		}
+		res = pstmt->executeQuery();
+
+		ids.clear();
+		while (res->next())
+			ids.push_back(res->getInt("sca_card"));
+
+		delete res;
+
+		delete pstmt;
+		delete stmt;
+		delete con;
+	}
+	catch (sql::SQLException &e) {
+		/*
+		MySQL Connector/C++ throws three different exceptions:
+
+		- sql::MethodNotImplementedException (derived from sql::SQLException)
+		- sql::InvalidArgumentException (derived from sql::SQLException)
+		- sql::SQLException (derived from std::runtime_error)
+		*/
+		cout << "# ERR: SQLException in " << __FILE__;
+		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		/* what() (derived from std::runtime_error) fetches error message */
+		cout << "# ERR: " << e.what();
+		cout << " (MySQL error code: " << e.getErrorCode();
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+	}
+
 	return ids;
 }
 
@@ -93,50 +142,4 @@ void writeFile(vector<int> ids)
 		else
 			cerr << "Erreur lors de l'ouverture du fichier !" << endl;
 	}
-}
-
-Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
-{
-
-}
-
-Card* heavyNeighbour(std::vector<Card> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
-{
-
-}
-
-int* distanceSum(std::vector<int> cards, std::vector<Card> allCards, std::vector<Edge> matrix, boost::bimap<int, int> ids)
-{
-	std::map<int, int> tmp;
-	std::map<int, int> res;
-	int *selectedCards = (int*)malloc(10 * sizeof(int));
-	int *max = (int*)calloc(10, sizeof(int));
-
-	for (int i : cards) {
-		for (Card j : allCards) {
-			if (tmp[j.idCard]) {
-				tmp[j.idCard] += matrix[ids.left.at(i) * allCards.size() + ids.left.at(j.idCard)].totalValue;
-			} else {
-				tmp[j.idCard] = matrix[ids.left.at(i) * allCards.size() + ids.left.at(j.idCard)].totalValue;
-			}
-		}
-	}
-
-	for (auto it : res) {
-		for (int i = 0; i < 10; i++) {
-			if (max[i] < it.second) {
-				max[i] = it.second;
-				res[i] = it.first;
-			}
-		}
-	}
-
-	for (int i = 0; i < 10; i++) {
-		selectedCards[i] = res[i];
-	}
-
-	free(max);
-	tmp.clear();
-	res.clear();
-	return selectedCards;
 }

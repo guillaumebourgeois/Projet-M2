@@ -1,27 +1,41 @@
 /***
-Bellamy Lola & Bourgeois-Ducournau Guillaume
-M2 DAR - 2017/2018
-Projet - Magic cards
+	Bellamy Lola & Bourgeois-Ducournau Guillaume
+	M2 DAR - 2017/2018
+	Projet - Magic cards
 ***/
 
 #pragma once
 
+#include "Card.h"
 #include "stdafx.h"
+
+typedef boost::bimap<int, int> bimap_type;
 
 class Graph
 {
-	public:
-		int nbCards;
-		std::vector<Edge> Edges;
+public:
+	int nbCards;
+	std::vector<Card> Cards;
+	std::vector<__int8> Edges;
 
-		Graph();
-		Graph(int);
-		~Graph();
+	bimap_type Ids;
 
-		void addEdge(Edge);
+	Graph();
+	~Graph();
 
-		void createEdges(std::vector<Card>);
+	void createCards();
 
-		void printGraph();
+	void createEdges(int, int, int, int, int);
+
+	void printGraph();
+
+	// Resolution algorithms 
+	// Méthode de résolution incluant un graph dynamique dont le sommet de recherche de base est unique
+	Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<__int8> matrix, boost::bimap<int, int> ids);
+
+	// Méthode de résolution par voisin le plus proche (le plus lourd)
+	std::vector<int> heavyNeighbour(std::vector<int> idsPool);
+
+	// Méthode de résolution par calcul de distance entre chaque carte
+	int* distanceSum(std::vector<int> cards);
 };
-
