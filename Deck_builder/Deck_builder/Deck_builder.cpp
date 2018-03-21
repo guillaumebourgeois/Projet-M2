@@ -11,8 +11,8 @@ using namespace std;
 Deck_builder::Deck_builder(QWidget *parent)
 	: QMainWindow(parent)
 {
-	QString url = R"(C:\Users\guill\Desktop\cards\0.jpg)";
-	QPixmap img(url);
+	//QString url = R"(C:\Users\guill\Desktop\cards\0.jpg)";
+	//QPixmap img(url);
 
 	int i, j, k;
 
@@ -48,7 +48,8 @@ Deck_builder::Deck_builder(QWidget *parent)
 		this->proposals[i]->setFixedHeight(HEIGHTLABEL);
 		this->proposals[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN));
 
-		this->proposals[i]->setPixmap(img.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
+		//this->proposals[i]->setPixmap(img.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
+		this->proposals[i]->clear();
 
 		this->buttons[i] = new AddButton(proposalsWidget);
 		this->buttons[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN + HEIGHTLABEL + 10));
@@ -77,7 +78,8 @@ Deck_builder::Deck_builder(QWidget *parent)
 			this->deck[i]->setFixedHeight(HEIGHTLABEL);
 			this->deck[i]->move(QPoint(MARGIN +  j * (MARGIN + WIDTHLABEL), MARGIN + k * (MARGIN + HEIGHTLABEL)));
 
-			this->deck[i]->setPixmap(img);
+			//this->deck[i]->setPixmap(img);
+			this->deck[i]->clear();
 		}
 	}
 }
