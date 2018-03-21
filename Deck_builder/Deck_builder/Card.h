@@ -12,6 +12,7 @@ class Card
 {
 public:
 	int idCard;
+	int multivereid;
 	std::string name;
 
 	std::bitset<NB_COLORS> colors{ 0b00000 };

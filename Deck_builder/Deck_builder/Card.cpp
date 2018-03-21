@@ -47,6 +47,7 @@ Card::Card(int idCard, string colorsString, string name, __int8 manaCost) : Card
 {
 	this->name = name;
 	this->manaCost = manaCost;
+	this->multivereid = -1;
 }
 
 Card::~Card()

@@ -15,7 +15,7 @@ Graph::Graph()
 void Graph::createCards()
 {
 	int nbCards = 0;
-
+	int id;
 	string colorValues;
 	string query;
 
@@ -81,8 +81,11 @@ void Graph::createCards()
 		);
 		while (editions_query->next())
 		{
-			this->Cards.at(this->Ids.right.at(editions_query->getInt("sca_card"))).blocs.push_back(editions_query->getInt("set_block"));
-			this->Cards.at(this->Ids.right.at(editions_query->getInt("sca_card"))).editions.push_back(editions_query->getInt("sca_set"));
+			id = this->Ids.right.at(editions_query->getInt("sca_card"));
+			this->Cards.at(id).blocs.push_back(editions_query->getInt("set_block"));
+			this->Cards.at(id).editions.push_back(editions_query->getInt("sca_set"));
+			if (this->Cards.at(id).multivereid == -1)
+				this->Cards.at(id).multivereid = editions_query->getInt("sca_multiverseid");
 		}
 
 		// TYPES

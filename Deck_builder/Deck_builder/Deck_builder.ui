@@ -148,22 +148,6 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1920</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuDeck_builder">
-    <property name="title">
-     <string>Fichier</string>
-    </property>
-   </widget>
-   <addaction name="menuDeck_builder"/>
-  </widget>
   <action name="openButton">
    <property name="text">
     <string>Ouvrir deck</string>
@@ -172,6 +156,11 @@
   <action name="saveButton">
    <property name="text">
     <string>Sauvegarder deck</string>
+   </property>
+  </action>
+  <action name="actiontest">
+   <property name="text">
+    <string>test</string>
    </property>
   </action>
  </widget>

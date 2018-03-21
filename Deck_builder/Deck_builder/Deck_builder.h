@@ -19,9 +19,7 @@ class Deck_builder : public QMainWindow
 public:
 	Deck_builder(QWidget *parent = Q_NULLPTR);
 
-	void handleOpenButton();
-	void handleSaveButton();
-	void handleAddButton();
+	void handleTestButton();
 
 	void initiate();
 
@@ -31,7 +29,7 @@ private:
 	// Labels
 	std::vector<QLabel*> proposals;
 	std::vector<QLabel*> deck;
-	QVector<QPushButton*> buttons;
+	QVector<AddButton*> buttons;
 
 	std::vector<int> idsPool;
 

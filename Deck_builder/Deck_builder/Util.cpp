@@ -13,6 +13,8 @@ using namespace std;
 vector<int> readFile()
 {
 	vector<int> ids;
+	vector<int> ids2;
+
 	int res;
 
 	OPENFILENAME ofn;
@@ -60,23 +62,24 @@ vector<int> readFile()
 
 		driver = get_driver_instance();
 		con = driver->connect(HOST, USER, PASS);
-		/* Connect to the MySQL database */
+
 		con->setSchema(DB);
 
 		stmt = con->createStatement();
 
 		// IDS 
-		pstmt = con->prepareStatement("SELECT sca_card, sca_multiverseid FROM mag_setcard WHERE sca_multiverseid IN (?)");
 		for (int i = 0; i < ids.size(); ++i)
 		{
+			pstmt = con->prepareStatement("SELECT sca_card, sca_multiverseid FROM mag_setcard WHERE sca_multiverseid IN (?)");
+
 			pstmt->setInt(1, ids[i]);
 			pstmt->executeUpdate();
-		}
-		res = pstmt->executeQuery();
 
-		ids.clear();
-		while (res->next())
-			ids.push_back(res->getInt("sca_card"));
+			res = pstmt->executeQuery();
+			res->next();
+
+			ids2.push_back(res->getInt("sca_card"));
+		}
 
 		delete res;
 
@@ -85,22 +88,15 @@ vector<int> readFile()
 		delete con;
 	}
 	catch (sql::SQLException &e) {
-		/*
-		MySQL Connector/C++ throws three different exceptions:
-
-		- sql::MethodNotImplementedException (derived from sql::SQLException)
-		- sql::InvalidArgumentException (derived from sql::SQLException)
-		- sql::SQLException (derived from std::runtime_error)
-		*/
 		cout << "# ERR: SQLException in " << __FILE__;
 		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-		/* what() (derived from std::runtime_error) fetches error message */
+
 		cout << "# ERR: " << e.what();
 		cout << " (MySQL error code: " << e.getErrorCode();
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
 
-	return ids;
+	return ids2;
 }
 
 void writeFile(vector<int> ids)

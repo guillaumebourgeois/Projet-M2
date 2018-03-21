@@ -35,6 +35,7 @@
 /* DIMENSIONS */
 #define WIDTHLABEL 225
 #define HEIGHTLABEL 315
+#define MARGIN 25
 
 #include <tchar.h>
 #include <stdio.h>
@@ -54,6 +55,8 @@
 #include <qdebug.h>
 #include <QLabel>
 #include <QPushButton>
+#include <QWidget>
+#include <QHBoxLayout>
 
 #include "mysql_connection.h"
 #include "mysql_driver.h"
@@ -69,3 +72,4 @@
 #include <map>
 
 #include "Util.h"
+#include "AddButton.h"

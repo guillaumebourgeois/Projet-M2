@@ -45,9 +45,15 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AddButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Deck_builder.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AddButton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

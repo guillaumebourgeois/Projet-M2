@@ -16,8 +16,6 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QWidget>
 
@@ -28,6 +26,7 @@ class Ui_Deck_builderClass
 public:
     QAction *openButton;
     QAction *saveButton;
+    QAction *actiontest;
     QWidget *centralWidget;
     QGroupBox *proposalsBox;
     QScrollArea *proposalsArea;
@@ -35,8 +34,6 @@ public:
     QGroupBox *deckBox;
     QScrollArea *deckArea;
     QWidget *scrollAreaWidgetContents_2;
-    QMenuBar *menuBar;
-    QMenu *menuDeck_builder;
 
     void setupUi(QMainWindow *Deck_builderClass)
     {
@@ -55,6 +52,8 @@ public:
         openButton->setObjectName(QStringLiteral("openButton"));
         saveButton = new QAction(Deck_builderClass);
         saveButton->setObjectName(QStringLiteral("saveButton"));
+        actiontest = new QAction(Deck_builderClass);
+        actiontest->setObjectName(QStringLiteral("actiontest"));
         centralWidget = new QWidget(Deck_builderClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         proposalsBox = new QGroupBox(centralWidget);
@@ -94,14 +93,6 @@ public:
         scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 1897, 562));
         deckArea->setWidget(scrollAreaWidgetContents_2);
         Deck_builderClass->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(Deck_builderClass);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1920, 26));
-        menuDeck_builder = new QMenu(menuBar);
-        menuDeck_builder->setObjectName(QStringLiteral("menuDeck_builder"));
-        Deck_builderClass->setMenuBar(menuBar);
-
-        menuBar->addAction(menuDeck_builder->menuAction());
 
         retranslateUi(Deck_builderClass);
 
@@ -113,9 +104,9 @@ public:
         Deck_builderClass->setWindowTitle(QApplication::translate("Deck_builderClass", "Deck_builder", nullptr));
         openButton->setText(QApplication::translate("Deck_builderClass", "Ouvrir deck", nullptr));
         saveButton->setText(QApplication::translate("Deck_builderClass", "Sauvegarder deck", nullptr));
+        actiontest->setText(QApplication::translate("Deck_builderClass", "test", nullptr));
         proposalsBox->setTitle(QApplication::translate("Deck_builderClass", "Propositions", nullptr));
         deckBox->setTitle(QApplication::translate("Deck_builderClass", "Deck", nullptr));
-        menuDeck_builder->setTitle(QApplication::translate("Deck_builderClass", "Fichier", nullptr));
     } // retranslateUi
 
 };
