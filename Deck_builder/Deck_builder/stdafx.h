@@ -13,11 +13,11 @@
 #define DB "magic"
 
 #define NB_CARDS "20000"
-#define COEF_COLOR 2
+#define COEF_COLOR 3
 #define COEF_TYPE 1
-#define COEF_SUBTYPE 2
+#define COEF_SUBTYPE 3
 #define COEF_CAPACITY 1
-#define COEF_EDITION 2
+#define COEF_EDITION 3
 
 /* COLORS */
 #define NB_COLORS 5

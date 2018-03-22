@@ -143,7 +143,6 @@ void Deck_builder::setProposals()
 		this->buttons[i]->setText(QString::number(itprop->first));
 		this->buttons[i]->id = itprop->second;
 	}
-
 }
 
 void Deck_builder::handleAddButton(int j)
@@ -158,6 +157,8 @@ void Deck_builder::handleAddButton(int j)
 		this->idsPool.push_back(this->buttons[j]->id);
 
 		multiverseid = this->G.Cards[this->G.Ids.right.at(this->buttons[j]->id)].multivereid;
+		
+		qDebug() << this->buttons[j]->id << " " << multiverseid;
 
 		url = QString::number(multiverseid);
 		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
@@ -172,11 +173,20 @@ void Deck_builder::handleAddButton(int j)
 	}
 	else
 	{
+		int k = 0;
 		for (i = 0; i < NB_PROPOSALS; ++i)
 		{
 			this->buttons[i]->setEnabled(false);
 			this->buttons[i]->setText("");
 			this->proposals[i]->clear();
 		}
+
+		for (i = 0; i < this->idsPool.size(); ++i)
+		{
+			for (j = 0; j < this->idsPool.size(); ++j)
+				if (idsPool[i] == idsPool[j])
+					++k;
+		}
+		qDebug() << k;
 	}
 }

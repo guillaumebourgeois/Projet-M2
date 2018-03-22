@@ -316,9 +316,15 @@ Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std
 
 }
 
-bimap_type Graph::heavyNeighbour(vector<int> idsPool)
+bimap_type Graph::heavyNeighbour(vector<int> cardIdsPool)
 {
 	int i, j, k;
+
+	bool found;
+
+	vector<int> idsPool;
+	vector<int> cards;
+
 	map<int, multimap<int, int>> neighbors;
 	map<int, multimap<int, int>>::iterator itneighbors;
 
@@ -328,40 +334,36 @@ bimap_type Graph::heavyNeighbour(vector<int> idsPool)
 	bimap_type::left_iterator itleft;
 	bimap_type::right_iterator itright;
 
-	for (i = 0; i < idsPool.size(); ++i)
+	// Conversion card id ==> id dans la matrice d'adjacence
+	for (i = 0; i < cardIdsPool.size(); ++i)
 	{
-		int nbCards = this->nbCards;
-		// Conversion card id ==> id dans la matrice d'adjacence
-		idsPool[i] = this->Ids.right.at(idsPool[i]);
+		idsPool.push_back(this->Ids.right.at(cardIdsPool[i]));
 
-		// Remplissage des voisins de chaque carte du deck
 		// Neighbors contient une paire <id, multimap qui contiendra ses voisins triés par poids>
 		neighbors.insert(pair<int, multimap<int, int>>(idsPool[i], multimap<int, int>()));
-		for (j = 0; j < nbCards; ++j)
-		{
-			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
-			if (idsPool[i] != j)
-				neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * nbCards + j], j));
-		}
-
-		// On garde les NB_NEIGHBORS voisins dans la map pour diminuer les temps de calcul engendré par les recherches dans la map
-		/*for (itmm = neighbors[idsPool[i]].end(), j = 0; j < NB_NEIGHBORS; ++j, --itmm);
-			neighbors[idsPool[i]].erase(neighbors[idsPool[i]].begin(), itmm);*/
-
-		// Suppression des cartes déjà présentes dans le deck
 	}
 
-	// Suppression des cartes déjà présentes dans le deck
+	// Utilisation d'un vecteur qui contient les ids qui ne sont pas déjà présents dans le deck
+	for (i = 0; i < this->nbCards; ++i)
+	{
+		found = false;
+		j = 0;
+		while (found == false && j < idsPool.size())
+		{
+			if (i == idsPool[j])
+				found = true;
+			++j;
+		}
+		if (!found)
+			cards.push_back(i);
+	}
+
+	// Remplissage des voisins
 	for (i = 0; i < idsPool.size(); ++i)
 	{
-		for (itmm = neighbors[idsPool[i]].begin(); itmm != neighbors[idsPool[i]].end(); ++itmm)
-		{
-			for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
-			{
-				if (itmm->second == itneighbors->first)
-					neighbors[idsPool[i]].erase(itmm);
-			}
-		}
+		for (j = 0; j < cards.size(); ++j)
+			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
+			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]], cards[j]));
 	}
 
 	// REMPLISSAGE DES NB PROPOSITIONS
