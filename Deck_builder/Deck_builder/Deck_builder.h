@@ -17,21 +17,25 @@ class Deck_builder : public QMainWindow
 	Q_OBJECT
 
 public:
-	Deck_builder(QWidget *parent = Q_NULLPTR);
-
-	void handleTestButton();
-
-	void initiate();
-
-private:
 	Ui::Deck_builderClass ui;
 	
 	// Labels
 	std::vector<QLabel*> proposals;
 	std::vector<QLabel*> deck;
 	QVector<AddButton*> buttons;
+	QSignalMapper mapper;
+
+	int nbCards;
 
 	std::vector<int> idsPool;
 
 	Graph G;
+
+	Deck_builder(QWidget *parent = Q_NULLPTR);
+
+	void initiate();
+	void setProposals();
+
+private slots:
+	void handleAddButton(int);
 };

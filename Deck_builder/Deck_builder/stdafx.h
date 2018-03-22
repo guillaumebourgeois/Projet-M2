@@ -13,11 +13,11 @@
 #define DB "magic"
 
 #define NB_CARDS "20000"
-#define COEF_COLOR 10
+#define COEF_COLOR 2
 #define COEF_TYPE 1
-#define COEF_SUBTYPE 1
+#define COEF_SUBTYPE 2
 #define COEF_CAPACITY 1
-#define COEF_EDITION 1
+#define COEF_EDITION 2
 
 /* COLORS */
 #define NB_COLORS 5
@@ -45,6 +45,7 @@
 #include <windows.h>
 
 #include <boost/bimap.hpp>
+#include <boost/bimap/support/lambda.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <QtWidgets/QMainWindow>
@@ -56,7 +57,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QWidget>
-#include <QHBoxLayout>
+#include <QSignalMapper>
 
 #include "mysql_connection.h"
 #include "mysql_driver.h"

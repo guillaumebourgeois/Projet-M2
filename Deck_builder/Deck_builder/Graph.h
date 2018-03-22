@@ -34,7 +34,7 @@ public:
 	Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<__int8> matrix, boost::bimap<int, int> ids);
 
 	// Méthode de résolution par voisin le plus proche (le plus lourd)
-	std::vector<int> heavyNeighbour(std::vector<int> idsPool);
+	bimap_type heavyNeighbour(std::vector<int> idsPool);
 
 	// Méthode de résolution par calcul de distance entre chaque carte
 	int* distanceSum(std::vector<int> cards);

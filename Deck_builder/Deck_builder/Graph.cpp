@@ -7,6 +7,7 @@
 #include "Graph.h"
 
 using namespace std;
+using namespace boost::bimaps;
 
 Graph::Graph()
 {
@@ -60,7 +61,6 @@ void Graph::createCards()
 				)
 			);
 
-			//cout << cards_query->getInt("car_id") << " ";
 			this->Ids.insert(bimap_type::value_type(nbCards, cards_query->getInt("car_id")));
 
 			++nbCards;
@@ -157,16 +157,9 @@ void Graph::createCards()
 		delete con;
 	}
 	catch (sql::SQLException &e) {
-		/*
-		MySQL Connector/C++ throws three different exceptions:
-
-		- sql::MethodNotImplementedException (derived from sql::SQLException)
-		- sql::InvalidArgumentException (derived from sql::SQLException)
-		- sql::SQLException (derived from std::runtime_error)
-		*/
 		cout << "# ERR: SQLException in " << __FILE__;
 		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-		/* what() (derived from std::runtime_error) fetches error message */
+
 		cout << "# ERR: " << e.what();
 		cout << " (MySQL error code: " << e.getErrorCode();
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -187,8 +180,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 	int maxTypeValue = 0, maxSubtypeValue = 0, maxCapacityValue = 0, maxTotalValue = 0;
 
 	int n = this->nbCards;
-
-	//cout << n << endl;
 
 	for (i = 0; i < n; ++i) {
 		for (j = 0; j < n; ++j) {
@@ -299,13 +290,9 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 					++results[totalValue];
 
 				this->Edges[i*nbCards + j] = totalValue;
-				//if (editionValue != 0)
-				//cout << colorValue << " " << editionValue << "   " << (int)this->Edges[i*nbCards + j].totalValue << endl;
 			}
 		}
 	}
-	//cout << maxSubtypeValue << " " << maxTypeValue << " " << maxCapacityValue << endl;
-	cout << endl << "Max total value : " << maxTotalValue << endl;
 	map<int, int>::iterator it;
 	for (it = results.begin(); it != results.end(); ++it)
 		cout << it->first << " " << it->second << endl;
@@ -319,7 +306,7 @@ void Graph::printGraph()
 	}
 
 	//cout << "nbCards : " << this->nbCards << endl;
-	cout << "Total : " << (int)this->Edges.size() << " liens." << endl;
+	//cout << "Total : " << (int)this->Edges.size() << " liens." << endl;
 }
 
 // Resolution algorithms 
@@ -329,39 +316,44 @@ Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std
 
 }
 
-vector<int> Graph::heavyNeighbour(vector<int> idsPool)
+bimap_type Graph::heavyNeighbour(vector<int> idsPool)
 {
 	int i, j, k;
 	map<int, multimap<int, int>> neighbors;
 	map<int, multimap<int, int>>::iterator itneighbors;
-	map<int, multimap<int, int>>::iterator itneighbors1;
-	map<int, multimap<int, int>>::iterator itneighbors2;
 
 	multimap<int, int>::iterator itmm;
 
-	map<int, int> proposals;
-	map<int, int>::iterator itprop;
-
-	int max;
-	int idMax;
+	bimap_type proposals;
+	bimap_type::left_iterator itleft;
+	bimap_type::right_iterator itright;
 
 	for (i = 0; i < idsPool.size(); ++i)
 	{
 		int nbCards = this->nbCards;
-		idsPool[i] = this->Ids.left.at(idsPool[i]);
+		// Conversion card id ==> id dans la matrice d'adjacence
+		idsPool[i] = this->Ids.right.at(idsPool[i]);
 
 		// Remplissage des voisins de chaque carte du deck
+		// Neighbors contient une paire <id, multimap qui contiendra ses voisins triés par poids>
 		neighbors.insert(pair<int, multimap<int, int>>(idsPool[i], multimap<int, int>()));
 		for (j = 0; j < nbCards; ++j)
 		{
+			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
 			if (idsPool[i] != j)
 				neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * nbCards + j], j));
 		}
 
-		for (itmm = neighbors[idsPool[i]].end(), j = 0; j < NB_NEIGHBORS; ++j, --itmm);
-		neighbors[idsPool[i]].erase(neighbors[idsPool[i]].begin(), itmm);
+		// On garde les NB_NEIGHBORS voisins dans la map pour diminuer les temps de calcul engendré par les recherches dans la map
+		/*for (itmm = neighbors[idsPool[i]].end(), j = 0; j < NB_NEIGHBORS; ++j, --itmm);
+			neighbors[idsPool[i]].erase(neighbors[idsPool[i]].begin(), itmm);*/
 
 		// Suppression des cartes déjà présentes dans le deck
+	}
+
+	// Suppression des cartes déjà présentes dans le deck
+	for (i = 0; i < idsPool.size(); ++i)
+	{
 		for (itmm = neighbors[idsPool[i]].begin(); itmm != neighbors[idsPool[i]].end(); ++itmm)
 		{
 			for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
@@ -372,74 +364,38 @@ vector<int> Graph::heavyNeighbour(vector<int> idsPool)
 		}
 	}
 
-	for (i = neighbors.size(); i < DECKSIZE; ++i)
-	{
-		// REMPLISSAGE DES NB PROPOSITIONS
-		proposals.clear();
-		for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
-		{
-			itmm = itneighbors->second.end();
-			--itmm;
-			// Recherche des voisins les plus proches en faisant la somme des poids
-			for (j = 0; j < NB_PROPOSALS; ++j, --itmm)
-			{
-				if (proposals.find(itmm->second) == proposals.end())
-					proposals.insert(pair<int, int>(itmm->second, itmm->first));
-				else
-					proposals.at(itmm->second) += itmm->first;
-			}
-		}
-
-		// AJOUT D'UNE CARTE AU DECK
-		if (i >= neighbors.size() - 1)
-		{
-			// RECHERCHE DE LA CARTE LA PLUS PROCHE
-			max = -1;
-			for (itprop = proposals.begin(); itprop != proposals.end(); ++itprop)
-			{
-				if (itprop->second > max)
-				{
-					idMax = itprop->first;
-					max = itprop->second;
-				}
-			}
-			// AJOUT DE LA CARTE AU DECK ET REMPLISSAGE DE SES VOISINS
-			neighbors.insert(pair<int, multimap<int, int>>(idMax, multimap<int, int>()));
-			for (j = 0; j < nbCards; ++j)
-			{
-				if (idMax != j)
-					neighbors.at(idMax).insert(pair<int, int>(this->Edges[idMax * nbCards + j], j));
-			}
-
-			for (itmm = neighbors[idMax].end(), j = 0; j < NB_NEIGHBORS; ++j, --itmm);
-			neighbors[idMax].erase(neighbors[idMax].begin(), itmm);
-
-			// Suppression des cartes déjà présentes dans le deck
-			for (itneighbors1 = neighbors.begin(); itneighbors1 != neighbors.end(); ++itneighbors1)
-			{
-				for (itmm = itneighbors1->second.begin(); itmm != itneighbors1->second.end(); ++itmm)
-				{
-					for (itneighbors2 = neighbors.begin(); itneighbors2 != neighbors.end(); ++itneighbors2)
-					{
-						if (itmm->second == itneighbors2->first)
-							itneighbors1->second.erase(itmm);
-					}
-				}
-			}
-		}
-		//cout << endl << endl;
-	}
-
-	vector<int> deck;
+	// REMPLISSAGE DES NB PROPOSITIONS
+	// Parcours de la map<id, multimap des voisins>
 	for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
 	{
-		//cout << itneighbors->first << endl;
-		deck.push_back(this->Ids.right.at(itneighbors->first));
+		// Recherche des voisins les plus proches en faisant la somme des poids
+		for (itmm = itneighbors->second.begin(); itmm != itneighbors->second.end(); ++itmm)
+		{
+			// Si le voisin est déjà dans la map des propositions on additionne son poids sinon on l'ajoute
+			// Proposals est une bimap de <id, poids>
+			if ((itleft = proposals.left.find(itmm->second)) == proposals.left.end())
+				proposals.insert(bimap_type::value_type(itmm->second, itmm->first));
+			else
+				proposals.left.modify_data(itleft, _data += itmm->first);
+		}
+		/*tmm = itneighbors->second.end();
+		--itmm;
+		for (j = 0; j < NB_PROPOSALS; ++j, --itmm)
+		{
+			// Si le voisin est déjà dans la map des propositions on additionne son poids sinon on l'ajoute
+			// Proposals est une bimap de <id, poids>
+			itleft = proposals.left.find(itmm->second);
+			if (itleft == proposals.left.end())
+				proposals.insert(bimap_type::value_type(itmm->second, itmm->first));
+			else
+				proposals.left.modify_data(itleft, _data += itmm->first);
+		}*/
 	}
 
-	//writeFile(deck);
+	for (itright = proposals.right.begin(); itright != proposals.right.end(); ++itright)
+		proposals.right.replace_data(itright, this->Ids.left.at(itright->second));
 
-	return deck;
+	return proposals;
 }
 
 int* Graph::distanceSum(std::vector<int> cards)

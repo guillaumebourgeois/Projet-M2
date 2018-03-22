@@ -7,22 +7,21 @@
 #include "stdafx.h"
 #pragma once
 
-class QPushButton;
+//class QPushButton;
 
-class AddButton : public QWidget
+//class AddButton : public QWidget
+class AddButton : public QPushButton
 {
 	Q_OBJECT
 public:
 	AddButton(QWidget *parent = 0);
 	~AddButton();
-
-	QPushButton *btn;
+	
+	//QPushButton *btn;
 	int id;
 
-private slots:
-	void handleAddButton();
-
-private:
+/*private slots:
+	void handleButton();*/
 
 };
 

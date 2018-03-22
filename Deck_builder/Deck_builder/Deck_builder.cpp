@@ -18,14 +18,12 @@ Deck_builder::Deck_builder(QWidget *parent)
 
 	ui.setupUi(this);
 
-	// Buttons
-	connect(this->ui.openButton, SIGNAL(clicked()), this, SLOT(handleOpenButton()));
-	connect(this->ui.saveButton, SIGNAL(released()), this, SLOT(handleSaveButton()));
-
 	// Vectors of labels
 	this->proposals.resize(NB_PROPOSALS);
 	this->deck.resize(DECKSIZE);
 	this->buttons.resize(NB_PROPOSALS);
+
+	this->nbCards = 0;
 
 	// Initiate proposals box, scroll area, widget, labels
 	ui.proposalsBox->setFixedHeight(465);
@@ -43,17 +41,21 @@ Deck_builder::Deck_builder(QWidget *parent)
 
 	for (i = 0; i < NB_PROPOSALS; ++i)
 	{
-		this->proposals[i] = new QLabel("proposalsLabel" + i, proposalsWidget);
+		this->proposals[i] = new QLabel("proposalsLabel", proposalsWidget);
 		this->proposals[i]->setFixedWidth(WIDTHLABEL);
 		this->proposals[i]->setFixedHeight(HEIGHTLABEL);
 		this->proposals[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN));
 
-		//this->proposals[i]->setPixmap(img.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
 		this->proposals[i]->clear();
 
 		this->buttons[i] = new AddButton(proposalsWidget);
 		this->buttons[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN + HEIGHTLABEL + 10));
+
+		connect(this->buttons[i], SIGNAL(clicked()), &this->mapper, SLOT(map()));
+		this->mapper.setMapping(this->buttons[i], i);
 	}
+
+	connect(&this->mapper, SIGNAL(mapped(int)), this, SLOT(handleAddButton(int)));
 
 	// Initiate deck box, scroll area, widget, labels
 	ui.deckBox->setFixedHeight(689);
@@ -78,7 +80,6 @@ Deck_builder::Deck_builder(QWidget *parent)
 			this->deck[i]->setFixedHeight(HEIGHTLABEL);
 			this->deck[i]->move(QPoint(MARGIN +  j * (MARGIN + WIDTHLABEL), MARGIN + k * (MARGIN + HEIGHTLABEL)));
 
-			//this->deck[i]->setPixmap(img);
 			this->deck[i]->clear();
 		}
 	}
@@ -89,9 +90,13 @@ void Deck_builder::initiate()
 	QString url;
 	QPixmap image;
 
-	int i, multiverseid;
+	int i, j, multiverseid;
+
+	bimap_type proposals;
+	bimap_type::right_iterator itprop;
 
 	this->idsPool = readFile();
+	this->nbCards = this->idsPool.size();
 	this->G = Graph();
 	this->G.createCards();
 	this->G.createEdges(COEF_COLOR, COEF_TYPE, COEF_SUBTYPE, COEF_CAPACITY, COEF_EDITION);
@@ -105,36 +110,73 @@ void Deck_builder::initiate()
 		url.push_back(".jpg");
 
 		image.load(url);
-		image = image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL));
-
-		this->deck[i]->setPixmap(image);
+		this->deck[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL)));
 	}
 
+	this->setProposals();
+}
 
-	//this->proposals[i]->clear();
+void Deck_builder::setProposals()
+{
+	QString url;
+	QPixmap image;
 
-	//vector<int> finalDeck = this->G.heavyNeighbour(this->idsPool);
-	//writeFile(imgs);
-	/*
-	for (int i = 0; i < DECKSIZE; ++i)
+	int i, multiverseid;
+
+	bimap_type proposals;
+	bimap_type::right_iterator itprop;
+
+	proposals = this->G.heavyNeighbour(this->idsPool);
+
+	for (i = 0, itprop = proposals.right.end(); i < NB_PROPOSALS && itprop != proposals.right.begin(); ++i)
 	{
-		url = QString::number(imgs[i]);
+		--itprop;
+		multiverseid = this->G.Cards[this->G.Ids.right.at(itprop->second)].multivereid;
+
+		url = QString::number(multiverseid);
 		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
 		url.push_back(".jpg");
 
 		image.load(url);
-		image = image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL));
+		this->proposals[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
 
-		this->deck[i]->setPixmap(image);
+		this->buttons[i]->setText(QString::number(itprop->first));
+		this->buttons[i]->id = itprop->second;
 	}
-	*/
-	//writeFile(imgs);
-}	
 
-void Deck_builder::handleTestButton()
+}
+
+void Deck_builder::handleAddButton(int j)
 {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You Clicked " + ((QPushButton*)sender())->text());
-	msgBox.exec();
+	QString url;
+	QPixmap image;
+
+	int i, multiverseid;
+
+	if (this->nbCards < DECKSIZE)
+	{
+		this->idsPool.push_back(this->buttons[j]->id);
+
+		multiverseid = this->G.Cards[this->G.Ids.right.at(this->buttons[j]->id)].multivereid;
+
+		url = QString::number(multiverseid);
+		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
+		url.push_back(".jpg");
+
+		image.load(url);
+		this->deck[this->nbCards]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
+
+		++this->nbCards;
+		
+		this->setProposals();
+	}
+	else
+	{
+		for (i = 0; i < NB_PROPOSALS; ++i)
+		{
+			this->buttons[i]->setEnabled(false);
+			this->buttons[i]->setText("");
+			this->proposals[i]->clear();
+		}
+	}
 }
