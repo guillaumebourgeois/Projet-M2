@@ -14,10 +14,10 @@
 
 #define NB_CARDS "20000"
 #define COEF_COLOR 3
-#define COEF_TYPE 1
-#define COEF_SUBTYPE 3
-#define COEF_CAPACITY 1
-#define COEF_EDITION 3
+#define COEF_TYPE 0
+#define COEF_SUBTYPE 0
+#define COEF_CAPACITY 0
+#define COEF_EDITION 0
 
 /* COLORS */
 #define NB_COLORS 5
@@ -29,13 +29,21 @@
 
 /* OPTIMISATION PROBLEM */
 #define NB_NEIGHBORS 500
-#define NB_PROPOSALS 10
+#define NB_PROPOSALS 50
 #define DECKSIZE 40
 
 /* DIMENSIONS */
 #define WIDTHLABEL 225
 #define HEIGHTLABEL 315
 #define MARGIN 25
+
+/* ALGORITHM CHOICE :
+	0 : Heavy neighbour
+	1 : k closest neighbors
+	2 : using dynamic graph
+	3 : distance sum
+*/
+#define ALGORITHM 1
 
 #include <tchar.h>
 #include <stdio.h>

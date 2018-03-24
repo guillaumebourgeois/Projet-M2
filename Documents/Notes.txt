@@ -120,6 +120,18 @@ A faire :
 
 
 
+Fichier texte de config 
+Equilibrage du deck :
+- Sorts : Enchantements, rituels, ephémères
+- Sorts/créatures : 50/50 %
+- Courbe de mana : calcul de la moyenne : 2
+- Couleurs : 100% / nbCouleurs
+
+TO DO :
+- Fichiers de config
+- Stats 
+- Influençage de l'algo
+
 
 
 

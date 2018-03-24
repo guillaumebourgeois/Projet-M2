@@ -121,27 +121,48 @@ void Deck_builder::setProposals()
 	QString url;
 	QPixmap image;
 
-	int i, multiverseid;
+	int i, multiverseid, choice;
 
-	bimap_type proposals;
-	bimap_type::right_iterator itprop;
+	multimap<int, int> proposals;
+	multimap<int, int>::iterator itprop;
 
-	proposals = this->G.heavyNeighbour(this->idsPool);
-
-	for (i = 0, itprop = proposals.right.end(); i < NB_PROPOSALS && itprop != proposals.right.begin(); ++i)
+	switch (ALGORITHM)
 	{
-		--itprop;
-		multiverseid = this->G.Cards[this->G.Ids.right.at(itprop->second)].multivereid;
+		case 0:
+			proposals = this->G.heavyNeighbour(this->idsPool);
+			break;
+		case 1:
+			proposals = this->G.closestNeighbours(this->idsPool);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+	}
 
-		url = QString::number(multiverseid);
-		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
-		url.push_back(".jpg");
+	for (i = 0, itprop = proposals.end(); i < NB_PROPOSALS && itprop != proposals.begin(); ++i)
+	{
+		do {
+			--itprop;
+			multiverseid = this->G.Cards[this->G.Ids.right.at(itprop->second)].multivereid;
 
-		image.load(url);
-		this->proposals[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
+			url = QString::number(multiverseid);
+			url.push_front(R"(C:\Users\guill\Desktop\cards\)");
+			url.push_back(".jpg");
 
-		this->buttons[i]->setText(QString::number(itprop->first));
-		this->buttons[i]->id = itprop->second;
+			image.load(url);
+			// Affichage de la carte 0 (chargement de l'image impossible)
+			/*if (image.isNull())
+			{
+				url = QString(R"(C:\Users\guill\Desktop\cards\0.jpg)");
+				image.load(url);
+			}*/
+
+			this->proposals[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL), Qt::IgnoreAspectRatio));
+
+			this->buttons[i]->setText(QString::number(itprop->first));
+			this->buttons[i]->id = itprop->second;
+		} while (image.isNull() && itprop != proposals.end());
 	}
 }
 
@@ -158,8 +179,6 @@ void Deck_builder::handleAddButton(int j)
 
 		multiverseid = this->G.Cards[this->G.Ids.right.at(this->buttons[j]->id)].multivereid;
 		
-		qDebug() << this->buttons[j]->id << " " << multiverseid;
-
 		url = QString::number(multiverseid);
 		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
 		url.push_back(".jpg");
@@ -187,6 +206,7 @@ void Deck_builder::handleAddButton(int j)
 				if (idsPool[i] == idsPool[j])
 					++k;
 		}
-		qDebug() << k;
+
+		writeFile(idsPool);
 	}
 }

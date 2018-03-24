@@ -177,7 +177,7 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 	int nbColorc1, nbColorc2, commons;
 	int i, j, k, l;
 	int colorValue, editionValue, typeValue, capacityValue, subtypeValue, totalValue;
-	int maxTypeValue = 0, maxSubtypeValue = 0, maxCapacityValue = 0, maxTotalValue = 0;
+	//int maxTypeValue = 0, maxSubtypeValue = 0, maxCapacityValue = 0, maxTotalValue = 0;
 
 	int n = this->nbCards;
 
@@ -186,86 +186,100 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 			if (i != j)
 			{
 				// COLORS
-				nbCommonsBits = this->Cards[i].colors & this->Cards[j].colors;
+				colorValue = 0;
+				if (colorCoef != 0)
+				{
+					nbCommonsBits = this->Cards[i].colors & this->Cards[j].colors;
 
-				nbColorc1 = this->Cards[i].colors.count();
-				nbColorc2 = this->Cards[j].colors.count();
+					nbColorc1 = this->Cards[i].colors.count();
+					nbColorc2 = this->Cards[j].colors.count();
 
-				commons = nbCommonsBits.count();
+					commons = nbCommonsBits.count();
 
-				if (commons == 0)
-					colorValue = 0;
-				else if (nbColorc1 == 0 || nbColorc2 == 0)
-					colorValue = 3;
-				else
-					colorValue = (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
+					if (commons == 0)
+						colorValue = 0;
+					else if (nbColorc1 == 0 || nbColorc2 == 0)
+						colorValue = 3;
+					else
+						colorValue = (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
+				}
 
 				// EDITION
 				editionValue = 0;
-				k = 0;
-				l = 0;
-				while (editionValue == 0 && k < this->Cards[i].editions.size())
+				if (editionCoef != 0)
 				{
-					while (editionValue == 0 && l < this->Cards[j].editions.size())
+					k = 0;
+					l = 0;
+					while (editionValue == 0 && k < this->Cards[i].editions.size())
 					{
-						if (this->Cards[i].editions[k] == this->Cards[j].editions[l])
-							editionValue = 2;
-						++l;
+						while (editionValue == 0 && l < this->Cards[j].editions.size())
+						{
+							if (this->Cards[i].editions[k] == this->Cards[j].editions[l])
+								editionValue = 2;
+							++l;
+						}
+						++k;
 					}
-					++k;
-				}
-				k = 0;
-				l = 0;
-				while (editionValue == 0 && k < this->Cards[i].blocs.size())
-				{
-					while (editionValue == 0 && l < this->Cards[j].blocs.size())
+					k = 0;
+					l = 0;
+					while (editionValue == 0 && k < this->Cards[i].blocs.size())
 					{
-						if (this->Cards[i].blocs[k] == this->Cards[j].blocs[l])
-							editionValue = 1;
-						++l;
+						while (editionValue == 0 && l < this->Cards[j].blocs.size())
+						{
+							if (this->Cards[i].blocs[k] == this->Cards[j].blocs[l])
+								editionValue = 1;
+							++l;
+						}
+						++k;
 					}
-					++k;
 				}
-
 				// SUBTYPES
 				subtypeValue = 0;
-				for (k = 0; k < this->Cards[i].subtypes.size(); ++k)
+				if (subtypeCoef != 0)
 				{
-					for (l = 0; l < this->Cards[j].subtypes.size(); ++l)
+					for (k = 0; k < this->Cards[i].subtypes.size(); ++k)
 					{
-						if (this->Cards[i].subtypes[k] == this->Cards[j].subtypes[l])
-							++subtypeValue;
+						for (l = 0; l < this->Cards[j].subtypes.size(); ++l)
+						{
+							if (this->Cards[i].subtypes[k] == this->Cards[j].subtypes[l])
+								++subtypeValue;
+						}
 					}
+					/*if (subtypeValue > maxSubtypeValue)
+						maxSubtypeValue = subtypeValue;*/
 				}
-				if (subtypeValue > maxSubtypeValue)
-					maxSubtypeValue = subtypeValue;
 
 				// TYPES
 				typeValue = 0;
-				for (k = 0; k < this->Cards[i].types.size(); ++k)
+				if (typeCoef != 0)
 				{
-					for (l = 0; l < this->Cards[j].types.size(); ++l)
+					for (k = 0; k < this->Cards[i].types.size(); ++k)
 					{
-						if (this->Cards[i].types[k] == this->Cards[j].types[l])
-							++typeValue;
+						for (l = 0; l < this->Cards[j].types.size(); ++l)
+						{
+							if (this->Cards[i].types[k] == this->Cards[j].types[l])
+								++typeValue;
+						}
 					}
+					/*if (typeValue > maxTypeValue)
+						maxTypeValue = typeValue;*/
 				}
-				if (typeValue > maxTypeValue)
-					maxTypeValue = typeValue;
 
 				// CAPACITIES
 				capacityValue = 0;
-				for (k = 0; k < this->Cards[i].capacities.size(); ++k)
+				if (capacityCoef != 0)
 				{
-					for (l = 0; l < this->Cards[j].capacities.size(); ++l)
+					for (k = 0; k < this->Cards[i].capacities.size(); ++k)
 					{
-						if (this->Cards[i].capacities[k] == this->Cards[j].capacities[l])
-							++capacityValue;
+						for (l = 0; l < this->Cards[j].capacities.size(); ++l)
+						{
+							if (this->Cards[i].capacities[k] == this->Cards[j].capacities[l])
+								++capacityValue;
+						}
 					}
+					/*if (capacityValue > maxCapacityValue)
+						maxCapacityValue = capacityValue;*/
 				}
-				if (capacityValue > maxCapacityValue)
-					maxCapacityValue = capacityValue;
-
 				// TOTAL
 				/*totalValue =
 					colorValue * COEF_COLOR +
@@ -281,8 +295,8 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 					subtypeValue	* subtypeCoef	+
 					capacityValue	* capacityCoef	;
 
-				if (totalValue > maxTotalValue)
-					maxTotalValue = totalValue;
+				/*if (totalValue > maxTotalValue)
+					maxTotalValue = totalValue;*/
 
 				if (results.find(totalValue) == results.end())
 					results.insert(pair<int, int>(totalValue, 1));
@@ -293,9 +307,9 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 			}
 		}
 	}
-	map<int, int>::iterator it;
+	/*map<int, int>::iterator it;
 	for (it = results.begin(); it != results.end(); ++it)
-		cout << it->first << " " << it->second << endl;
+		cout << it->first << " " << it->second << endl;*/
 }
 
 void Graph::printGraph()
@@ -316,7 +330,7 @@ Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std
 
 }
 
-bimap_type Graph::heavyNeighbour(vector<int> cardIdsPool)
+multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool)
 {
 	int i, j, k;
 
@@ -330,9 +344,9 @@ bimap_type Graph::heavyNeighbour(vector<int> cardIdsPool)
 
 	multimap<int, int>::iterator itmm;
 
-	bimap_type proposals;
-	bimap_type::left_iterator itleft;
-	bimap_type::right_iterator itright;
+	map<int, int> weights;
+	map<int, int>::iterator it;
+	multimap<int, int> proposals;
 
 	// Conversion card id ==> id dans la matrice d'adjacence
 	for (i = 0; i < cardIdsPool.size(); ++i)
@@ -366,36 +380,21 @@ bimap_type Graph::heavyNeighbour(vector<int> cardIdsPool)
 			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]], cards[j]));
 	}
 
+	for (i = 0; i < cards.size(); ++i)
+		weights.insert(pair<int, int>(cards[i], 0));
+
 	// REMPLISSAGE DES NB PROPOSITIONS
 	// Parcours de la map<id, multimap des voisins>
 	for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
 	{
 		// Recherche des voisins les plus proches en faisant la somme des poids
 		for (itmm = itneighbors->second.begin(); itmm != itneighbors->second.end(); ++itmm)
-		{
-			// Si le voisin est déjà dans la map des propositions on additionne son poids sinon on l'ajoute
-			// Proposals est une bimap de <id, poids>
-			if ((itleft = proposals.left.find(itmm->second)) == proposals.left.end())
-				proposals.insert(bimap_type::value_type(itmm->second, itmm->first));
-			else
-				proposals.left.modify_data(itleft, _data += itmm->first);
-		}
-		/*tmm = itneighbors->second.end();
-		--itmm;
-		for (j = 0; j < NB_PROPOSALS; ++j, --itmm)
-		{
-			// Si le voisin est déjà dans la map des propositions on additionne son poids sinon on l'ajoute
-			// Proposals est une bimap de <id, poids>
-			itleft = proposals.left.find(itmm->second);
-			if (itleft == proposals.left.end())
-				proposals.insert(bimap_type::value_type(itmm->second, itmm->first));
-			else
-				proposals.left.modify_data(itleft, _data += itmm->first);
-		}*/
+			weights[itmm->second] += itmm->first;
 	}
 
-	for (itright = proposals.right.begin(); itright != proposals.right.end(); ++itright)
-		proposals.right.replace_data(itright, this->Ids.left.at(itright->second));
+	// Inversion key/value
+	for (it = weights.begin(); it != weights.end(); ++it)
+		proposals.insert(pair<int, int>(it->second, this->Ids.left.at(it->first)));
 
 	return proposals;
 }
@@ -438,7 +437,76 @@ int* Graph::distanceSum(std::vector<int> cards)
 	return selectedCards;
 }
 
+multimap<int, int> Graph::closestNeighbours(vector<int> cardIdsPool)
+{
+	int i, j, k;
 
+	bool found;
+
+	vector<int> idsPool;
+	vector<int> cards;
+
+	map<int, multimap<int, int>> neighbors;
+	map<int, multimap<int, int>>::iterator itneighbors;
+
+	multimap<int, int>::iterator itmm;
+
+	map<int, int> weights;
+	map<int, int>::iterator it;
+	multimap<int, int> proposals;
+
+	// Conversion card id ==> id dans la matrice d'adjacence
+	for (i = 0; i < cardIdsPool.size(); ++i)
+	{
+		idsPool.push_back(this->Ids.right.at(cardIdsPool[i]));
+
+		// Neighbors contient une paire <id, multimap qui contiendra ses voisins triés par poids>
+		neighbors.insert(pair<int, multimap<int, int>>(idsPool[i], multimap<int, int>()));
+	}
+
+	// Utilisation d'un vecteur qui contient les ids qui ne sont pas déjà présents dans le deck
+	for (i = 0; i < this->nbCards; ++i)
+	{
+		found = false;
+		j = 0;
+		while (found == false && j < idsPool.size())
+		{
+			if (i == idsPool[j])
+				found = true;
+			++j;
+		}
+		if (!found)
+			cards.push_back(i);
+	}
+
+	// Remplissage des voisins
+	for (i = 0; i < idsPool.size(); ++i)
+	{
+		for (j = 0; j < cards.size(); ++j)
+			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
+			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]], cards[j]));
+	}
+
+	for (i = 0; i < cards.size(); ++i)
+		weights.insert(pair<int, int>(cards[i], 0));
+
+	// REMPLISSAGE DES NB PROPOSITIONS
+	// Parcours de la map<id, multimap des voisins>
+	for (itneighbors = neighbors.begin(); itneighbors != neighbors.end(); ++itneighbors)
+	{
+		// Recherche des voisins les plus proches en faisant la somme des poids
+		for (itmm = itneighbors->second.begin(); itmm != itneighbors->second.end(); ++itmm)
+		{
+			if (itmm->first > weights[itmm->second])
+				weights[itmm->second] = itmm->first;
+		}
+	}
+	// Inversion key/value
+	for (it = weights.begin(); it != weights.end(); ++it)
+		proposals.insert(pair<int, int>(it->second, this->Ids.left.at(it->first)));
+
+	return proposals;
+}
 
 Graph::~Graph()
 {
