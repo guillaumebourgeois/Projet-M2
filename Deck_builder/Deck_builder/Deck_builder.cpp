@@ -90,6 +90,8 @@ void Deck_builder::initiate()
 	QString url;
 	QPixmap image;
 
+	std::clock_t start;
+
 	int i, j, multiverseid;
 
 	bimap_type proposals;
@@ -99,7 +101,15 @@ void Deck_builder::initiate()
 	this->nbCards = this->idsPool.size();
 	this->G = Graph();
 	this->G.createCards();
+
+	start = clock();
 	this->G.createEdges(COEF_COLOR, COEF_TYPE, COEF_SUBTYPE, COEF_CAPACITY, COEF_EDITION);
+	qDebug() << "Génération de matrice : " << clock() - start;
+	start = clock();
+	this->G.writeMatrix();
+	qDebug() << "Enregistrement de la matrice : " << clock() - start;
+	this->G.readMatrix();
+	qDebug() << "Lecture de la matrice : " << clock() - start;
 
 	for (int i = 0; i < this->idsPool.size(); ++i)
 	{

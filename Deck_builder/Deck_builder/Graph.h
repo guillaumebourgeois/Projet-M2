@@ -41,4 +41,7 @@ public:
 
 	// Méthode de résolution des k plus proches voisins
 	std::multimap<int, int> closestNeighbours(std::vector<int>);
+
+	void writeMatrix();
+	void readMatrix();
 };

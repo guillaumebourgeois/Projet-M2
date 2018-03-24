@@ -15,9 +15,9 @@
 #define NB_CARDS "20000"
 #define COEF_COLOR 3
 #define COEF_TYPE 0
-#define COEF_SUBTYPE 0
+#define COEF_SUBTYPE 2
 #define COEF_CAPACITY 0
-#define COEF_EDITION 0
+#define COEF_EDITION 6
 
 /* COLORS */
 #define NB_COLORS 5
@@ -43,7 +43,7 @@
 	2 : using dynamic graph
 	3 : distance sum
 */
-#define ALGORITHM 1
+#define ALGORITHM 0
 
 #include <tchar.h>
 #include <stdio.h>
