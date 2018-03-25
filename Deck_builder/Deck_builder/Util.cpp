@@ -38,8 +38,6 @@ vector<int> readFile()
 
 	if (ofn.lpstrFile != nullptr)
 	{
-		_tprintf(_T("Ouverture du fichier : %s\n"), ofn.lpstrFile);
-
 		ifstream file(ofn.lpstrFile, ios::in);
 
 		if (file)
@@ -48,54 +46,53 @@ vector<int> readFile()
 				ids.push_back(res);
 
 			file.close();
+
+			try {
+				sql::Driver *driver;
+				sql::Connection *con;
+				sql::Statement *stmt;
+				sql::PreparedStatement *pstmt;
+				sql::ResultSet *res;
+
+				driver = get_driver_instance();
+				con = driver->connect(HOST, USER, PASS);
+
+				con->setSchema(DB);
+
+				stmt = con->createStatement();
+
+				// IDS 
+				for (int i = 0; i < ids.size(); ++i)
+				{
+					pstmt = con->prepareStatement("SELECT sca_card, sca_multiverseid FROM mag_setcard WHERE sca_multiverseid IN (?)");
+
+					pstmt->setInt(1, ids[i]);
+					pstmt->executeUpdate();
+
+					res = pstmt->executeQuery();
+					res->next();
+
+					ids2.push_back(res->getInt("sca_card"));
+				}
+
+				delete res;
+
+				delete pstmt;
+				delete stmt;
+				delete con;
+			}
+			catch (sql::SQLException &e) {
+				qDebug() << "# ERR: SQLException in " << __FILE__;
+				qDebug() << "(" << __FUNCTION__ << ") on line " << __LINE__;
+
+				qDebug() << "# ERR: " << e.what();
+				qDebug() << " (MySQL error code: " << e.getErrorCode();
+			}
 		}
 		else
-			cout << "Erreur lors de l'ouverture du fichier" << endl;
+			qDebug() << "Erreur lors de l'ouverture du fichier";
 	}
-
-	try {
-		sql::Driver *driver;
-		sql::Connection *con;
-		sql::Statement *stmt;
-		sql::PreparedStatement *pstmt;
-		sql::ResultSet *res;
-
-		driver = get_driver_instance();
-		con = driver->connect(HOST, USER, PASS);
-
-		con->setSchema(DB);
-
-		stmt = con->createStatement();
-
-		// IDS 
-		for (int i = 0; i < ids.size(); ++i)
-		{
-			pstmt = con->prepareStatement("SELECT sca_card, sca_multiverseid FROM mag_setcard WHERE sca_multiverseid IN (?)");
-
-			pstmt->setInt(1, ids[i]);
-			pstmt->executeUpdate();
-
-			res = pstmt->executeQuery();
-			res->next();
-
-			ids2.push_back(res->getInt("sca_card"));
-		}
-
-		delete res;
-
-		delete pstmt;
-		delete stmt;
-		delete con;
-	}
-	catch (sql::SQLException &e) {
-		cout << "# ERR: SQLException in " << __FILE__;
-		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-
-		cout << "# ERR: " << e.what();
-		cout << " (MySQL error code: " << e.getErrorCode();
-		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
-	}
-
+	
 	return ids2;
 }
 
@@ -124,8 +121,6 @@ void writeFile(vector<int> ids)
 
 	if (ofn.lpstrFile != nullptr)
 	{
-		_tprintf(_T("Enregistrement dans le fichier fichier : %s\n"), ofn.lpstrFile);
-
 		ofstream file(ofn.lpstrFile, ios::out | ios::trunc);
 
 		if (file)
@@ -136,6 +131,6 @@ void writeFile(vector<int> ids)
 			file.close();
 		}
 		else
-			cerr << "Erreur lors de l'ouverture du fichier !" << endl;
+			qDebug() << "Erreur lors de l'ouverture du fichier !";
 	}
 }

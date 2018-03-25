@@ -25,17 +25,47 @@ Deck_builder::Deck_builder(QWidget *parent)
 
 	this->nbCards = 0;
 
-	// Initiate proposals box, scroll area, widget, labels
-	ui.proposalsBox->setFixedHeight(465);
-	ui.proposalsBox->setFixedWidth(1920);
-	ui.proposalsBox->move(QPoint(0, 0));
+	//ui.centralWidget->setStyleSheet("background-image: url(C:\\Users\\guill\\Desktop\\Projet-M2\\background.jpg); background-position: center;");
+	// Config initialisation
+	configOpened = false;
+	deckOpened = false;
 
-	ui.proposalsArea->setFixedHeight(425);
-	ui.proposalsArea->setFixedWidth(1920);
+	colorCoef = 1;
+	typeCoef = 1;
+	subtypeCoef = 1;
+	capacityCoef = 1;
+	editionCoef = 1;
+
+	algorithm = 0;
+
+	spellsPart = 0;
+	creaturesPart = 0;
+	mana = 0;
+	nbColors = 0;
+
+	// Connect buttons
+	connect(ui.openConfigButton	, SIGNAL(clicked()), this, SLOT(handleOpenConfigButton()));
+	connect(ui.initiateButton	, SIGNAL(clicked()), this, SLOT(handleInitiateButton()));
+	connect(ui.openDeckButton	, SIGNAL(clicked()), this, SLOT(handleOpenDeckButton()));
+	connect(ui.saveDeckButton	, SIGNAL(clicked()), this, SLOT(handleSaveDeckButton()));
+	connect(ui.resetDeckButton	, SIGNAL(clicked()), this, SLOT(handleResetDeckButton()));
+	connect(ui.resetGraphButton	, SIGNAL(clicked()), this, SLOT(handleResetGraphButton()));
+
+	ui.initiateButton->setEnabled(false);
+	ui.saveDeckButton->setEnabled(false);
+	ui.openDeckButton->setEnabled(false);
+
+	// Initiate proposals box, scroll area, widget, labels
+	ui.proposalsBox->setFixedHeight(445);
+	ui.proposalsBox->setFixedWidth(1720);
+	ui.proposalsBox->move(QPoint(200, 0));
+
+	ui.proposalsArea->setFixedHeight(405);
+	ui.proposalsArea->setFixedWidth(1720);
 	ui.proposalsArea->move(QPoint(0, 40));
 
 	QWidget *proposalsWidget = new QWidget();
-	proposalsWidget->setFixedHeight(390);
+	proposalsWidget->setFixedHeight(380);
 	proposalsWidget->setFixedWidth(NB_PROPOSALS * (MARGIN + WIDTHLABEL) + MARGIN);
 	ui.proposalsArea->setWidget(proposalsWidget);
 
@@ -44,30 +74,32 @@ Deck_builder::Deck_builder(QWidget *parent)
 		this->proposals[i] = new QLabel("proposalsLabel", proposalsWidget);
 		this->proposals[i]->setFixedWidth(WIDTHLABEL);
 		this->proposals[i]->setFixedHeight(HEIGHTLABEL);
-		this->proposals[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN));
+		this->proposals[i]->move(QPoint(MARGIN + i * (MARGIN + WIDTHLABEL), MARGIN));
 
 		this->proposals[i]->clear();
 
 		this->buttons[i] = new AddButton(proposalsWidget);
-		this->buttons[i]->move(QPoint(25 + i * (MARGIN + WIDTHLABEL), MARGIN + HEIGHTLABEL + 10));
+		this->buttons[i]->move(QPoint(MARGIN + i * (MARGIN + WIDTHLABEL), MARGIN + HEIGHTLABEL + 10));
+		this->buttons[i]->setEnabled(false);
 
 		connect(this->buttons[i], SIGNAL(clicked()), &this->mapper, SLOT(map()));
+
 		this->mapper.setMapping(this->buttons[i], i);
 	}
 
 	connect(&this->mapper, SIGNAL(mapped(int)), this, SLOT(handleAddButton(int)));
 
 	// Initiate deck box, scroll area, widget, labels
-	ui.deckBox->setFixedHeight(689);
-	ui.deckBox->setFixedWidth(1920);
-	ui.deckBox->move(QPoint(0, 465));
+	ui.deckBox->setFixedHeight(709);
+	ui.deckBox->setFixedWidth(1720);
+	ui.deckBox->move(QPoint(200, 445));
 
-	ui.deckArea->setFixedHeight(549);
-	ui.deckArea->setFixedWidth(1920);
+	ui.deckArea->setFixedHeight(569);
+	ui.deckArea->setFixedWidth(1720);
 	ui.deckArea->move(QPoint(0, 40));
 
 	QWidget *deckWidget = new QWidget();
-	deckWidget->setFixedWidth(1920);
+	deckWidget->setFixedWidth(1720);
 	deckWidget->setFixedHeight((DECKSIZE/5) * (MARGIN + HEIGHTLABEL) + MARGIN);
 	ui.deckArea->setWidget(deckWidget);
 
@@ -85,47 +117,6 @@ Deck_builder::Deck_builder(QWidget *parent)
 	}
 }
 
-void Deck_builder::initiate()
-{
-	QString url;
-	QPixmap image;
-
-	std::clock_t start;
-
-	int i, j, multiverseid;
-
-	bimap_type proposals;
-	bimap_type::right_iterator itprop;
-
-	this->idsPool = readFile();
-	this->nbCards = this->idsPool.size();
-	this->G = Graph();
-	this->G.createCards();
-
-	start = clock();
-	this->G.createEdges(COEF_COLOR, COEF_TYPE, COEF_SUBTYPE, COEF_CAPACITY, COEF_EDITION);
-	qDebug() << "Génération de matrice : " << clock() - start;
-	start = clock();
-	this->G.writeMatrix();
-	qDebug() << "Enregistrement de la matrice : " << clock() - start;
-	this->G.readMatrix();
-	qDebug() << "Lecture de la matrice : " << clock() - start;
-
-	for (int i = 0; i < this->idsPool.size(); ++i)
-	{
-		multiverseid = this->G.Cards[this->G.Ids.right.at(this->idsPool[i])].multivereid;
-
-		url = QString::number(multiverseid);
-		url.push_front(R"(C:\Users\guill\Desktop\cards\)");
-		url.push_back(".jpg");
-
-		image.load(url);
-		this->deck[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL)));
-	}
-
-	this->setProposals();
-}
-
 void Deck_builder::setProposals()
 {
 	QString url;
@@ -136,7 +127,7 @@ void Deck_builder::setProposals()
 	multimap<int, int> proposals;
 	multimap<int, int>::iterator itprop;
 
-	switch (ALGORITHM)
+	switch (this->algorithm)
 	{
 		case 0:
 			proposals = this->G.heavyNeighbour(this->idsPool);
@@ -176,6 +167,24 @@ void Deck_builder::setProposals()
 	}
 }
 
+void Deck_builder::generateStats()
+{
+	int i;
+	int nbCards = this->idsPool.size();
+	float mana = 0.0;
+
+	for (i = 0; i < this->idsPool.size(); ++i)
+	{
+		mana += (float)this->G.Cards[this->G.Ids.right.at(this->idsPool[i])].manaCost;
+	}
+
+	mana /= (nbCards);
+
+	ui.manaU->setText(QString("%1").arg(mana, 2, 'f', 2));
+}
+
+
+// BUTTONS FUNCTIONS
 void Deck_builder::handleAddButton(int j)
 {
 	QString url;
@@ -199,24 +208,177 @@ void Deck_builder::handleAddButton(int j)
 		++this->nbCards;
 		
 		this->setProposals();
+
+		this->generateStats();
 	}
 	else
 	{
-		int k = 0;
 		for (i = 0; i < NB_PROPOSALS; ++i)
 		{
 			this->buttons[i]->setEnabled(false);
 			this->buttons[i]->setText("");
 			this->proposals[i]->clear();
 		}
+	}
+}
 
-		for (i = 0; i < this->idsPool.size(); ++i)
+void Deck_builder::handleOpenConfigButton()
+{
+	int res;
+	
+	string buffer;
+
+	OPENFILENAME ofn;
+	TCHAR tmp[1024];
+	tmp[0] = '\0';
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
+
+	ofn.lStructSize = sizeof(OPENFILENAMEW);
+	ofn.lpstrFile = tmp;
+	ofn.nMaxFile = 1024;
+	ofn.lpstrTitle = _T("Deck Builder");
+	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
+	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
+	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
+
+	res = GetOpenFileName(&ofn);
+	//int res = GetSaveFileName(&ofn); 
+	//printf("Code de sortie : %d\n", res);
+	//convert_multiple(ofn.lpstrFile);
+
+	if (ofn.lpstrFile != nullptr)
+	{
+		ifstream file(ofn.lpstrFile, ios::in);
+
+		if (file)
 		{
-			for (j = 0; j < this->idsPool.size(); ++j)
-				if (idsPool[i] == idsPool[j])
-					++k;
+			file >> buffer >> this->colorCoef;
+			file >> buffer >> this->typeCoef;
+			file >> buffer >> this->subtypeCoef;
+			file >> buffer >> this->capacityCoef;
+			file >> buffer >> this->editionCoef;
+
+			file >> buffer >> this->algorithm;
+
+			file >> buffer >> this->spellsPart;
+			file >> buffer >> this->creaturesPart;
+			file >> buffer >> this->mana;
+			file >> buffer >> this->nbColors;
+
+			file.close();
+
+			ui.nbColors->setText(QString::number(this->nbColors));
+			ui.mana->setText(QString::number(this->mana));
+			ui.creaturesPart->setText(QString::number(this->creaturesPart));
+			ui.spellsPart->setText(QString::number(this->spellsPart));
+
+
+			ui.initiateButton->setEnabled(true);
+		}
+		else
+			qDebug() << "Erreur lors de l'ouverture du fichier";
+	}
+}
+
+void Deck_builder::handleInitiateButton()
+{
+	//std::clock_t start;
+
+	this->G = Graph();
+	this->G.createCards();
+
+	//start = clock();
+	this->G.createEdges(this->colorCoef, this->typeCoef, this->subtypeCoef, this->capacityCoef, this->editionCoef);
+	//qDebug() << "Génération de matrice : " << clock() - start;
+	//start = clock();
+	//this->G.writeMatrix();
+	//qDebug() << "Enregistrement de la matrice : " << clock() - start;
+	//this->G.readMatrix();
+	//qDebug() << "Lecture de la matrice : " << clock() - start;
+	
+	ui.openDeckButton->setEnabled(true);
+}
+
+void Deck_builder::handleOpenDeckButton()
+{
+	QString url;
+	QPixmap image;
+
+	int i, j, multiverseid;
+
+	bimap_type proposals;
+	bimap_type::right_iterator itprop;
+
+	this->idsPool = readFile();
+	if ((this->nbCards = this->idsPool.size()) =! 0)
+	{
+		for (int i = 0; i < this->idsPool.size(); ++i)
+		{
+			multiverseid = this->G.Cards[this->G.Ids.right.at(this->idsPool[i])].multivereid;
+
+			url = QString::number(multiverseid);
+			url.push_front(R"(C:\Users\guill\Desktop\cards\)");
+			url.push_back(".jpg");
+
+			image.load(url);
+			this->deck[i]->setPixmap(image.scaled(QSize(WIDTHLABEL, HEIGHTLABEL)));
 		}
 
-		writeFile(idsPool);
+		for (i = 0; i < this->buttons.size(); ++i)
+			this->buttons[i]->setEnabled(true);
+
+		this->setProposals();
+
+		this->generateStats();
+
+		ui.saveDeckButton->setEnabled(true);
 	}
+}
+
+void Deck_builder::handleSaveDeckButton()
+{
+	writeFile(this->idsPool);
+}
+
+void Deck_builder::handleResetDeckButton()
+{
+	int i;
+	this->idsPool.clear();
+	this->idsPool.resize(0);
+
+	for (i = 0; i < NB_PROPOSALS; ++i)
+	{
+		this->buttons[i]->setEnabled(false);
+		this->buttons[i]->setText("Poids");
+		this->proposals[i]->clear();
+	}
+	for (i = 0; i < DECKSIZE; ++i)
+		this->deck[i]->clear();
+
+	ui.whiteU->setText("0");
+	ui.blueU->setText("0");
+	ui.blackU->setText("0");
+	ui.redU->setText("0");
+	ui.greenU->setText("0");
+	ui.creaturesU->setText("0");
+	ui.spellsU->setText("0");
+	ui.manaU->setText("0");
+
+	ui.whitePercent->setText("0");
+	ui.bluePercent->setText("0");
+	ui.blackPercent->setText("0");
+	ui.redPercent->setText("0");
+	ui.greenPercent->setText("0");
+	ui.creaturesPercent->setText("0");
+	ui.spellsPercent->setText("0");
+
+	ui.saveDeckButton->setEnabled(false);
+}
+
+void Deck_builder::handleResetGraphButton()
+{
+	this->G.Edges.clear();
+
+	ui.openDeckButton->setEnabled(false);
 }

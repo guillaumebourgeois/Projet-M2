@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	Deck_builder widget;
 	widget.showMaximized();
 	
-	widget.initiate();
+	//widget.initiate();
 
 	return app.exec();
 }

@@ -13,37 +13,18 @@
 #define DB "magic"
 
 #define NB_CARDS "20000"
-#define COEF_COLOR 3
-#define COEF_TYPE 0
-#define COEF_SUBTYPE 2
-#define COEF_CAPACITY 0
-#define COEF_EDITION 6
 
 /* COLORS */
 #define NB_COLORS 5
-#define COLOR_B 0
-#define COLOR_G 1
-#define COLOR_R 2
-#define COLOR_U 3
-#define COLOR_W 4
 
 /* OPTIMISATION PROBLEM */
-#define NB_NEIGHBORS 500
 #define NB_PROPOSALS 50
 #define DECKSIZE 40
 
 /* DIMENSIONS */
 #define WIDTHLABEL 225
 #define HEIGHTLABEL 315
-#define MARGIN 25
-
-/* ALGORITHM CHOICE :
-	0 : Heavy neighbour
-	1 : k closest neighbors
-	2 : using dynamic graph
-	3 : distance sum
-*/
-#define ALGORITHM 0
+#define MARGIN 10
 
 #include <tchar.h>
 #include <stdio.h>
@@ -60,7 +41,6 @@
 #include "ui_Deck_builder.h"
 #include <QMessageBox>
 #include <QVector>
-#include <QGridLayout>
 #include <qdebug.h>
 #include <QLabel>
 #include <QPushButton>
@@ -77,8 +57,8 @@
 #include <cppconn/prepared_statement.h>
 
 #include <vector>
-#include <bitset>
 #include <map>
+#include <bitset>
 
 #include "Util.h"
 #include "AddButton.h"

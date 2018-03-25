@@ -48,7 +48,7 @@ void Graph::createCards()
 			"LEFT JOIN mag_cardsupertype	AS cstype			ON cstype.csu_id	= csupertypeli.csul_supertype "
 			"WHERE NOT (cstype.csu_name <=> 'Basic' AND ctype.cty_name <=> 'Land') "
 			"GROUP BY card.car_id "
-			"LIMIT " NB_CARDS
+			//"LIMIT " NB_CARDS
 		);
 
 		while (cards_query->next()) {
@@ -157,12 +157,11 @@ void Graph::createCards()
 		delete con;
 	}
 	catch (sql::SQLException &e) {
-		cout << "# ERR: SQLException in " << __FILE__;
-		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+		qDebug() << "# ERR: SQLException in " << __FILE__;
+		qDebug() << "(" << __FUNCTION__ << ") on line " << __LINE__;
 
-		cout << "# ERR: " << e.what();
-		cout << " (MySQL error code: " << e.getErrorCode();
-		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+		qDebug() << "# ERR: " << e.what();
+		qDebug() << " (MySQL error code: " << e.getErrorCode();
 	}
 
 	this->nbCards = nbCards;
@@ -298,12 +297,12 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 				/*if (totalValue > maxTotalValue)
 					maxTotalValue = totalValue;*/
 
-				if (results.find(totalValue) == results.end())
+				/*if (results.find(totalValue) == results.end())
 					results.insert(pair<int, int>(totalValue, 1));
 				else
-					++results[totalValue];
+					++results[totalValue];*/
 
-				this->Edges[i*nbCards + j] = totalValue;
+				this->Edges[i * nbCards + j] = totalValue;
 			}
 		}
 	}
@@ -314,13 +313,13 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 
 void Graph::printGraph()
 {
-	for (int i = 0; i < this->Edges.size(); ++i) {
+	/*for (int i = 0; i < this->Edges.size(); ++i) {
 		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
 		//cout << unsigned(this->Edges[i].totalValue) << " ";
 	}
 
 	//cout << "nbCards : " << this->nbCards << endl;
-	//cout << "Total : " << (int)this->Edges.size() << " liens." << endl;
+	//cout << "Total : " << (int)this->Edges.size() << " liens." << endl;*/
 }
 
 // Resolution algorithms 
@@ -554,7 +553,7 @@ void Graph::writeMatrix()
 			file.close();
 		}
 		else
-			cerr << "Erreur lors de l'ouverture du fichier !" << endl;
+			qDebug() << "Erreur lors de l'ouverture du fichier !" << endl;
 	//}
 }
 
@@ -599,17 +598,13 @@ void Graph::readMatrix()
 			for (i = 0; i < n; ++i)
 			{
 				for (j = 0; j < n; ++j)
-				{
 					file >> (__int8)this->Edges[i * n + j];
-					//qDebug() << (int)this->Edges[i * n + j] << " ";
-				}
-				//qDebug() << "";
 			}
 
 			file.close();
 		}
 		else
-			cout << "Erreur lors de l'ouverture du fichier" << endl;
+			qDebug() << "Erreur lors de l'ouverture du fichier" << endl;
 	//}
 }
 

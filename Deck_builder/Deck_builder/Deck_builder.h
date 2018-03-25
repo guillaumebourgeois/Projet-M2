@@ -22,20 +22,47 @@ public:
 	// Labels
 	std::vector<QLabel*> proposals;
 	std::vector<QLabel*> deck;
+
 	QVector<AddButton*> buttons;
 	QSignalMapper mapper;
 
-	int nbCards;
+	// Config
+	bool configOpened;
+	bool deckOpened;
 
-	std::vector<int> idsPool;
+	int colorCoef;
+	int typeCoef;
+	int subtypeCoef;
+	int capacityCoef;
+	int editionCoef;
+	
+	int algorithm;
+
+	int spellsPart;
+	int creaturesPart;
+	int mana;
+	int nbColors;
+
+	// Deck
+	int nbCards;
 
 	Graph G;
 
+	std::vector<int> idsPool;
+
+	// Constructor
 	Deck_builder(QWidget *parent = Q_NULLPTR);
 
-	void initiate();
 	void setProposals();
+	void generateStats();
 
 private slots:
 	void handleAddButton(int);
+
+	void handleOpenConfigButton();
+	void handleInitiateButton();
+	void handleOpenDeckButton();
+	void handleResetDeckButton();
+	void handleResetGraphButton();
+	void handleSaveDeckButton();
 };
