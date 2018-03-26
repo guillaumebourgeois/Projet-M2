@@ -133,6 +133,13 @@ TO DO :
 - Influençage de l'algo
 
 
+Génération de la matrice avec couleur, edition, sous-type à 1 : 6,699 s ==> 7,715 s
+
+Génération de la matrice avec couleur, edition à 1 : 5,678 s ==> 5,437 s
+
+Génération de la matrice avec couleur à 1 : 5,317 s ==> 4,425 s
+
+
 
 
 [SOUTENANCE VENDREDI 30/03 14h]

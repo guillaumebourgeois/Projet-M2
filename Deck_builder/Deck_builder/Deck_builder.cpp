@@ -23,25 +23,28 @@ Deck_builder::Deck_builder(QWidget *parent)
 	this->deck.resize(DECKSIZE);
 	this->buttons.resize(NB_PROPOSALS);
 
-	this->nbCards = 0;
+	//this->nbCards = 0;
 
 	//ui.centralWidget->setStyleSheet("background-image: url(C:\\Users\\guill\\Desktop\\Projet-M2\\background.jpg); background-position: center;");
 	// Config initialisation
-	configOpened = false;
-	deckOpened = false;
+	this->configOpened = false;
+	this->deckOpened = false;
 
-	colorCoef = 1;
-	typeCoef = 1;
-	subtypeCoef = 1;
-	capacityCoef = 1;
-	editionCoef = 1;
+	this->colorCoef = 1;
+	this->typeCoef = 1;
+	this->subtypeCoef = 1;
+	this->capacityCoef = 1;
+	this->editionCoef = 1;
 
-	algorithm = 0;
+	this->algorithm = 0;
 
-	spellsPart = 0;
-	creaturesPart = 0;
-	mana = 0;
-	nbColors = 0;
+	this->spellsPart = 0;
+	this->creaturesPart = 0;
+	this->mana = 0;
+	this->nbColors = 0;
+
+	for (i = 0; i < NB_COLORS; ++i)
+		this->colors[i] = 0;
 
 	// Connect buttons
 	connect(ui.openConfigButton	, SIGNAL(clicked()), this, SLOT(handleOpenConfigButton()));
@@ -167,20 +170,98 @@ void Deck_builder::setProposals()
 	}
 }
 
+// STATS CALCUL
 void Deck_builder::generateStats()
 {
-	int i;
+	int i, j, id, type;
 	int nbCards = this->idsPool.size();
-	float mana = 0.0;
 
-	for (i = 0; i < this->idsPool.size(); ++i)
+	float mana = 0.0, creatures = 0.0, spells = 0.0;
+
+	float colorsPercent[5];
+
+	this->creaturesPart = 0;
+	this->spellsPart = 0;
+
+	for (i = 0; i < NB_COLORS; ++i)
 	{
-		mana += (float)this->G.Cards[this->G.Ids.right.at(this->idsPool[i])].manaCost;
+		this->colors[i] = 0;
+		colorsPercent[i] = 0.0;
+	}
+
+	for (i = 0; i < nbCards; ++i)
+	{
+		// ID de la carte dans le vector de cards
+		id = this->G.Ids.right.at(this->idsPool[i]);
+
+		// Cout en mana
+		mana += (float)this->G.Cards[id].manaCost;
+		
+		// Récupération des types de la carte
+		for (j = 0; j < this->G.Cards[id].types.size(); ++j)
+		{
+			type = (int)this->G.Cards[id].types[j];
+
+			switch (type)
+			{
+			case 3:
+				++this->creaturesPart;
+				break;
+			case 6:
+				++this->spellsPart;
+				break;
+			case 7:
+				++this->spellsPart;
+				break;
+			case 14:
+				++this->spellsPart;
+				break;
+			}
+		}
+
+		// Récupération des couleurs de la carte
+		for (j = 0; j < NB_COLORS; ++j)
+		{
+			if (this->G.Cards[id].colors[j] == true)
+			{
+				if (this->colors[j] == 0)
+					++this->nbColors;
+				++this->colors[j];
+			}
+		}
 	}
 
 	mana /= (nbCards);
+	creatures = (float)this->creaturesPart / (float)nbCards * 100.0;
+	spells = (float)this->spellsPart / (float)nbCards * 100.0;
+
+	for (i = 0; i < NB_COLORS; ++i)
+		colorsPercent[i] = (float)this->colors[i] / (float)nbCards * 100.0;
+
+	ui.nbCards->setText(QString::number(nbCards));
 
 	ui.manaU->setText(QString("%1").arg(mana, 2, 'f', 2));
+	
+	ui.creaturesU->setText(QString::number(this->creaturesPart));
+	ui.creaturesPercent->setText(QString("%1").arg(creatures, 2, 'f', 0));
+
+	ui.spellsU->setText(QString::number(this->spellsPart));
+	ui.spellsPercent->setText(QString("%1").arg(spells, 2, 'f', 0));
+
+	ui.blackU->setText(QString::number(this->colors[0]));
+	ui.blackPercent->setText(QString("%1").arg(colorsPercent[0], 2, 'f', 0));
+
+	ui.greenU->setText(QString::number(this->colors[1]));
+	ui.greenPercent->setText(QString("%1").arg(colorsPercent[1], 2, 'f', 0));
+
+	ui.redU->setText(QString::number(this->colors[2]));
+	ui.redPercent->setText(QString("%1").arg(colorsPercent[2], 2, 'f', 0));
+
+	ui.blueU->setText(QString::number(this->colors[3]));
+	ui.bluePercent->setText(QString("%1").arg(colorsPercent[3], 2, 'f', 0));
+
+	ui.whiteU->setText(QString::number(this->colors[4]));
+	ui.whitePercent->setText(QString("%1").arg(colorsPercent[4], 2, 'f', 0));
 }
 
 
@@ -224,7 +305,7 @@ void Deck_builder::handleAddButton(int j)
 
 void Deck_builder::handleOpenConfigButton()
 {
-	int res;
+	int res, i;
 	
 	string buffer;
 
@@ -264,15 +345,19 @@ void Deck_builder::handleOpenConfigButton()
 			file >> buffer >> this->spellsPart;
 			file >> buffer >> this->creaturesPart;
 			file >> buffer >> this->mana;
-			file >> buffer >> this->nbColors;
 
+			for (i = 0; i < NB_COLORS; ++i)
+			{
+				file >> buffer >> this->colors[i];
+				if (this->colors[i] == 1)
+					++this->nbColors;
+			}
 			file.close();
 
 			ui.nbColors->setText(QString::number(this->nbColors));
 			ui.mana->setText(QString::number(this->mana));
 			ui.creaturesPart->setText(QString::number(this->creaturesPart));
 			ui.spellsPart->setText(QString::number(this->spellsPart));
-
 
 			ui.initiateButton->setEnabled(true);
 		}
@@ -283,14 +368,14 @@ void Deck_builder::handleOpenConfigButton()
 
 void Deck_builder::handleInitiateButton()
 {
-	//std::clock_t start;
+	std::clock_t start;
 
 	this->G = Graph();
 	this->G.createCards();
 
-	//start = clock();
+	start = clock();
 	this->G.createEdges(this->colorCoef, this->typeCoef, this->subtypeCoef, this->capacityCoef, this->editionCoef);
-	//qDebug() << "Génération de matrice : " << clock() - start;
+	qDebug() << "Génération de matrice : " << clock() - start;
 	//start = clock();
 	//this->G.writeMatrix();
 	//qDebug() << "Enregistrement de la matrice : " << clock() - start;
@@ -305,14 +390,17 @@ void Deck_builder::handleOpenDeckButton()
 	QString url;
 	QPixmap image;
 
-	int i, j, multiverseid;
+	int i, j, multiverseid, tmp;
 
 	bimap_type proposals;
 	bimap_type::right_iterator itprop;
 
 	this->idsPool = readFile();
-	if ((this->nbCards = this->idsPool.size()) =! 0)
+	tmp = this->idsPool.size();
+	if (tmp != 0)
 	{
+		this->nbCards = this->idsPool.size();
+
 		for (int i = 0; i < this->idsPool.size(); ++i)
 		{
 			multiverseid = this->G.Cards[this->G.Ids.right.at(this->idsPool[i])].multivereid;

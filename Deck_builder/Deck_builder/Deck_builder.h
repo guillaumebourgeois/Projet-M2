@@ -42,6 +42,7 @@ public:
 	int creaturesPart;
 	int mana;
 	int nbColors;
+	int colors[NB_COLORS];
 
 	// Deck
 	int nbCards;

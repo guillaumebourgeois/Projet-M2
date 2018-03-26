@@ -77,6 +77,8 @@ public:
     QGroupBox *manaBox;
     QLabel *manaAverageLabel;
     QLabel *manaU;
+    QLabel *nbCards;
+    QLabel *nbCardsLabel;
     QGroupBox *configBox;
     QLabel *mana;
     QLabel *creaturesPartLabel;
@@ -184,12 +186,12 @@ public:
         saveDeckButton->setFont(font3);
         statsBox = new QGroupBox(centralWidget);
         statsBox->setObjectName(QStringLiteral("statsBox"));
-        statsBox->setGeometry(QRect(0, 610, 200, 360));
+        statsBox->setGeometry(QRect(0, 610, 200, 400));
         statsBox->setFont(font);
         statsBox->setAutoFillBackground(true);
         colorBox = new QGroupBox(statsBox);
         colorBox->setObjectName(QStringLiteral("colorBox"));
-        colorBox->setGeometry(QRect(10, 30, 180, 180));
+        colorBox->setGeometry(QRect(10, 70, 180, 180));
         colorBox->setFont(font2);
         colorBox->setAutoFillBackground(true);
         whiteLabel = new QLabel(colorBox);
@@ -292,7 +294,7 @@ public:
         whiteU_6->setAlignment(Qt::AlignCenter);
         repartBox = new QGroupBox(statsBox);
         repartBox->setObjectName(QStringLiteral("repartBox"));
-        repartBox->setGeometry(QRect(10, 210, 180, 90));
+        repartBox->setGeometry(QRect(10, 250, 180, 90));
         repartBox->setFont(font2);
         repartBox->setAutoFillBackground(true);
         spellsLabel = new QLabel(repartBox);
@@ -337,7 +339,7 @@ public:
         spellsPercent->setAlignment(Qt::AlignCenter);
         manaBox = new QGroupBox(statsBox);
         manaBox->setObjectName(QStringLiteral("manaBox"));
-        manaBox->setGeometry(QRect(10, 300, 180, 60));
+        manaBox->setGeometry(QRect(10, 340, 180, 60));
         manaBox->setFont(font2);
         manaBox->setAutoFillBackground(true);
         manaAverageLabel = new QLabel(manaBox);
@@ -349,6 +351,16 @@ public:
         manaU->setGeometry(QRect(120, 20, 30, 30));
         manaU->setFont(font4);
         manaU->setAlignment(Qt::AlignCenter);
+        nbCards = new QLabel(statsBox);
+        nbCards->setObjectName(QStringLiteral("nbCards"));
+        nbCards->setGeometry(QRect(120, 30, 40, 40));
+        nbCards->setFont(font2);
+        nbCards->setAlignment(Qt::AlignCenter);
+        nbCardsLabel = new QLabel(statsBox);
+        nbCardsLabel->setObjectName(QStringLiteral("nbCardsLabel"));
+        nbCardsLabel->setGeometry(QRect(20, 30, 100, 40));
+        nbCardsLabel->setFont(font2);
+        nbCardsLabel->setFrameShadow(QFrame::Sunken);
         configBox = new QGroupBox(centralWidget);
         configBox->setObjectName(QStringLiteral("configBox"));
         configBox->setGeometry(QRect(0, 410, 200, 200));
@@ -423,7 +435,7 @@ public:
         resetDeckButton->setText(QApplication::translate("Deck_builderClass", "Reset deck", nullptr));
         resetGraphButton->setText(QApplication::translate("Deck_builderClass", "Reset graphe", nullptr));
         saveDeckButton->setText(QApplication::translate("Deck_builderClass", "Sauvegarder deck", nullptr));
-        statsBox->setTitle(QApplication::translate("Deck_builderClass", "Statistiques", nullptr));
+        statsBox->setTitle(QApplication::translate("Deck_builderClass", "Statistiques Deck", nullptr));
         colorBox->setTitle(QApplication::translate("Deck_builderClass", "Couleurs", nullptr));
         whiteLabel->setText(QApplication::translate("Deck_builderClass", "Blanc", nullptr));
         blueLabel->setText(QApplication::translate("Deck_builderClass", "Bleu", nullptr));
@@ -457,6 +469,8 @@ public:
         manaBox->setTitle(QApplication::translate("Deck_builderClass", "Co\303\273ts en mana", nullptr));
         manaAverageLabel->setText(QApplication::translate("Deck_builderClass", "Moyenne", nullptr));
         manaU->setText(QApplication::translate("Deck_builderClass", "0", nullptr));
+        nbCards->setText(QApplication::translate("Deck_builderClass", "0", nullptr));
+        nbCardsLabel->setText(QApplication::translate("Deck_builderClass", "Cartes", nullptr));
         configBox->setTitle(QApplication::translate("Deck_builderClass", "Configuration", nullptr));
         mana->setText(QApplication::translate("Deck_builderClass", "0", nullptr));
         creaturesPartLabel->setText(QApplication::translate("Deck_builderClass", "Cr\303\251atures", nullptr));

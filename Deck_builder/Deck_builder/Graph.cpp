@@ -180,6 +180,150 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 
 	int n = this->nbCards;
 
+	/*// Initialisation
+	for (i = 0; i < n; ++i) 
+	{
+		for (j = 0; j < n; ++j) 
+			this->Edges[i * nbCards + j] = 0;
+	}
+
+	// COLORS
+	if (colorCoef != 0)
+	{
+		for (i = 0; i < n; ++i) 
+		{
+			for (j = 0; j < n; ++j) 
+			{
+				if (i != j)
+				{
+					nbCommonsBits = this->Cards[i].colors & this->Cards[j].colors;
+
+					nbColorc1 = this->Cards[i].colors.count();
+					nbColorc2 = this->Cards[j].colors.count();
+
+					commons = nbCommonsBits.count();
+
+					if (nbColorc1 == 0 || nbColorc2 == 0)
+						this->Edges[i * nbCards + j] += 3;
+					else
+						this->Edges[i * nbCards + j] += (NB_COLORS - (max(nbColorc1, nbColorc2) - commons));
+				}
+			}
+		}
+	}
+	
+	// EDITION			
+	if (editionCoef != 0)
+	{
+		for (i = 0; i < n; ++i)
+		{
+			for (j = 0; j < n; ++j)
+			{
+				if (i != j)
+				{
+					editionValue = 0;
+					k = 0;
+					l = 0;
+					while (editionValue == 0 && k < this->Cards[i].editions.size())
+					{
+						while (editionValue == 0 && l < this->Cards[j].editions.size())
+						{
+							if (this->Cards[i].editions[k] == this->Cards[j].editions[l])
+								editionValue = 2;
+							++l;
+						}
+						++k;
+					}
+					k = 0;
+					l = 0;
+					while (editionValue == 0 && k < this->Cards[i].blocs.size())
+					{
+						while (editionValue == 0 && l < this->Cards[j].blocs.size())
+						{
+							if (this->Cards[i].blocs[k] == this->Cards[j].blocs[l])
+								editionValue = 1;
+							++l;
+						}
+						++k;
+					}
+					this->Edges[i * nbCards + j] += editionValue;
+				}
+			}
+		}
+	}
+
+	// SUBTYPES
+	if (subtypeCoef != 0)
+	{
+		for (i = 0; i < n; ++i)
+		{
+			for (j = 0; j < n; ++j)
+			{
+				if (i != j)
+				{
+					subtypeValue = 0;
+					for (k = 0; k < this->Cards[i].subtypes.size(); ++k)
+					{
+						for (l = 0; l < this->Cards[j].subtypes.size(); ++l)
+						{
+							if (this->Cards[i].subtypes[k] == this->Cards[j].subtypes[l])
+								++subtypeValue;
+						}
+					}
+					this->Edges[i * nbCards + j] += editionValue;
+				}
+			}
+		}
+	}
+
+	// TYPES
+	if (typeCoef != 0)
+	{
+		for (i = 0; i < n; ++i)
+		{
+			for (j = 0; j < n; ++j)
+			{
+				if (i != j)
+				{
+					typeValue = 0;
+					for (k = 0; k < this->Cards[i].types.size(); ++k)
+					{
+						for (l = 0; l < this->Cards[j].types.size(); ++l)
+						{
+							if (this->Cards[i].types[k] == this->Cards[j].types[l])
+								++typeValue;
+						}
+					}
+					this->Edges[i * nbCards + j] += typeValue;
+				}
+			}
+		}
+	}
+
+	// CAPACITIES
+	if (capacityCoef != 0)
+	{
+		for (i = 0; i < n; ++i)
+		{
+			for (j = 0; j < n; ++j)
+			{
+				if (i != j)
+				{
+					capacityValue = 0;
+					for (k = 0; k < this->Cards[i].capacities.size(); ++k)
+					{
+						for (l = 0; l < this->Cards[j].capacities.size(); ++l)
+						{
+							if (this->Cards[i].capacities[k] == this->Cards[j].capacities[l])
+								++capacityValue;
+						}
+					}
+					this->Edges[i * nbCards + j] += capacityValue;
+				}
+			}
+		}
+	}*/
+
 	for (i = 0; i < n; ++i) {
 		for (j = 0; j < n; ++j) {
 			if (i != j)
@@ -244,8 +388,8 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++subtypeValue;
 						}
 					}
-					/*if (subtypeValue > maxSubtypeValue)
-						maxSubtypeValue = subtypeValue;*/
+					//if (subtypeValue > maxSubtypeValue)
+						//maxSubtypeValue = subtypeValue;
 				}
 
 				// TYPES
@@ -260,8 +404,8 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++typeValue;
 						}
 					}
-					/*if (typeValue > maxTypeValue)
-						maxTypeValue = typeValue;*/
+					//if (typeValue > maxTypeValue)
+						//maxTypeValue = typeValue;
 				}
 
 				// CAPACITIES
@@ -276,16 +420,16 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++capacityValue;
 						}
 					}
-					/*if (capacityValue > maxCapacityValue)
-						maxCapacityValue = capacityValue;*/
+					//if (capacityValue > maxCapacityValue)
+						//maxCapacityValue = capacityValue;
 				}
 				// TOTAL
-				/*totalValue =
-					colorValue * COEF_COLOR +
-					editionValue * COEF_EDITION +
-					subtypeValue * COEF_SUBTYPE +
-					typeValue * COEF_TYPE +
-					capacityValue * COEF_CAPACITY;*/
+				//totalValue =
+					//colorValue * COEF_COLOR +
+					//editionValue * COEF_EDITION +
+					//subtypeValue * COEF_SUBTYPE +
+					//typeValue * COEF_TYPE +
+					//capacityValue * COEF_CAPACITY;
 
 				totalValue =
 					colorValue		* colorCoef		+
@@ -294,21 +438,21 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 					subtypeValue	* subtypeCoef	+
 					capacityValue	* capacityCoef	;
 
-				/*if (totalValue > maxTotalValue)
-					maxTotalValue = totalValue;*/
+				//if (totalValue > maxTotalValue)
+					//maxTotalValue = totalValue;
 
-				/*if (results.find(totalValue) == results.end())
-					results.insert(pair<int, int>(totalValue, 1));
-				else
-					++results[totalValue];*/
+				//if (results.find(totalValue) == results.end())
+					//results.insert(pair<int, int>(totalValue, 1));
+				//else
+					//++results[totalValue];
 
 				this->Edges[i * nbCards + j] = totalValue;
 			}
 		}
 	}
-	/*map<int, int>::iterator it;
-	for (it = results.begin(); it != results.end(); ++it)
-		cout << it->first << " " << it->second << endl;*/
+	//map<int, int>::iterator it;
+	//for (it = results.begin(); it != results.end(); ++it)
+		//qDebug() << it->first << " " << it->second << endl;*/
 }
 
 void Graph::printGraph()
