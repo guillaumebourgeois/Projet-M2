@@ -174,7 +174,7 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 
 	bitset<5> nbCommonsBits;
 	int nbColorc1, nbColorc2, commons;
-	int i, j, k, l;
+	int i, j, k, l, m, ind;
 	int colorValue, editionValue, typeValue, capacityValue, subtypeValue, totalValue;
 	//int maxTypeValue = 0, maxSubtypeValue = 0, maxCapacityValue = 0, maxTotalValue = 0;
 
@@ -323,11 +323,13 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 			}
 		}
 	}*/
-
+	
 	for (i = 0; i < n; ++i) {
+		m = i * n;
+
+		ind = i + i + 1;
+		//for (j = i + 1; j < n; ++j) {
 		for (j = 0; j < n; ++j) {
-			if (i != j)
-			{
 				// COLORS
 				colorValue = 0;
 				if (colorCoef != 0)
@@ -424,12 +426,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 						//maxCapacityValue = capacityValue;
 				}
 				// TOTAL
-				//totalValue =
-					//colorValue * COEF_COLOR +
-					//editionValue * COEF_EDITION +
-					//subtypeValue * COEF_SUBTYPE +
-					//typeValue * COEF_TYPE +
-					//capacityValue * COEF_CAPACITY;
 
 				totalValue =
 					colorValue		* colorCoef		+
@@ -446,13 +442,17 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 				//else
 					//++results[totalValue];
 
-				this->Edges[i * nbCards + j] = totalValue;
-			}
+				this->Edges[m + j] = totalValue;
+				//this->Edges[ind] = totalValue;
+				//ind += n;
 		}
 	}
 	//map<int, int>::iterator it;
 	//for (it = results.begin(); it != results.end(); ++it)
 		//qDebug() << it->first << " " << it->second << endl;*/
+
+	for (i = 0; i < n; ++i)
+		this->Edges[i * n + i] = 0;
 }
 
 void Graph::printGraph()
@@ -473,7 +473,7 @@ Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std
 
 }
 
-multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool)
+multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool /*influenceCoef, int[]*/)
 {
 	int i, j, k;
 
@@ -519,8 +519,14 @@ multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool)
 	for (i = 0; i < idsPool.size(); ++i)
 	{
 		for (j = 0; j < cards.size(); ++j)
+		{
 			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
 			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]], cards[j]));
+
+			// Orientation de l'algo
+
+
+		}
 	}
 
 	for (i = 0; i < cards.size(); ++i)

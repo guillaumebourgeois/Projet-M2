@@ -30,12 +30,12 @@ Deck_builder::Deck_builder(QWidget *parent)
 	this->configOpened = false;
 	this->deckOpened = false;
 
-	this->colorCoef = 1;
-	this->typeCoef = 1;
-	this->subtypeCoef = 1;
-	this->capacityCoef = 1;
-	this->editionCoef = 1;
-	this->influenceCoef = 1;
+	this->colorCoef = 0;
+	this->typeCoef = 0;
+	this->subtypeCoef = 0;
+	this->capacityCoef = 0;
+	this->editionCoef = 0;
+	this->influenceCoef = 0;
 
 	this->algorithm = 0;
 
@@ -175,14 +175,11 @@ void Deck_builder::setProposals()
 void Deck_builder::generateStats()
 {
 	int i, j, id, type;
+	int creaturesU = 0, spellsU = 0;
 	int nbCards = this->idsPool.size();
 
 	float mana = 0.0, creatures = 0.0, spells = 0.0;
-
 	float colorsPercent[5];
-
-	this->creaturesPart = 0;
-	this->spellsPart = 0;
 
 	for (i = 0; i < NB_COLORS; ++i)
 	{
@@ -206,16 +203,19 @@ void Deck_builder::generateStats()
 			switch (type)
 			{
 			case 3:
-				++this->creaturesPart;
+				++creaturesU;
+				break;
+			case 5:
+				++spellsU;
 				break;
 			case 6:
-				++this->spellsPart;
+				++spellsU;
 				break;
 			case 7:
-				++this->spellsPart;
+				++spellsU;
 				break;
 			case 14:
-				++this->spellsPart;
+				++spellsU;
 				break;
 			}
 		}
@@ -224,29 +224,36 @@ void Deck_builder::generateStats()
 		for (j = 0; j < NB_COLORS; ++j)
 		{
 			if (this->G.Cards[id].colors[j] == true)
-			{
-				if (this->colors[j] == 0)
-					++this->nbColors;
 				++this->colors[j];
-			}
 		}
 	}
 
 	mana /= (nbCards);
-	creatures = (float)this->creaturesPart / (float)nbCards * 100.0;
-	spells = (float)this->spellsPart / (float)nbCards * 100.0;
+	creatures = (float)creaturesU / (float)nbCards * 100.0;
+	spells = (float)spellsU / (float)nbCards * 100.0;
 
 	for (i = 0; i < NB_COLORS; ++i)
 		colorsPercent[i] = (float)this->colors[i] / (float)nbCards * 100.0;
+
+	// influence[0] = spells
+	// influence[1] = creatures
+	// influence[2] = mana
+	// influence[3-7] = colors
+	this->influence[0] = this->spellsPart - spells;
+	this->influence[1] = this->creaturesPart - (int)creatures;
+	this->influence[2] = (this->mana*10) - (int)(mana*10);
+
+	for (i = 0; i < NB_COLORS; ++i)
+		this->influence[3 + i] = (100 / this->nbColors) - (int)colorsPercent[i];
 
 	ui.nbCards->setText(QString::number(nbCards));
 
 	ui.manaU->setText(QString("%1").arg(mana, 2, 'f', 2));
 	
-	ui.creaturesU->setText(QString::number(this->creaturesPart));
+	ui.creaturesU->setText(QString::number(creaturesU));
 	ui.creaturesPercent->setText(QString("%1").arg(creatures, 2, 'f', 0));
 
-	ui.spellsU->setText(QString::number(this->spellsPart));
+	ui.spellsU->setText(QString::number(spellsU));
 	ui.spellsPercent->setText(QString("%1").arg(spells, 2, 'f', 0));
 
 	ui.blackU->setText(QString::number(this->colors[0]));
@@ -335,15 +342,15 @@ void Deck_builder::handleOpenConfigButton()
 
 		if (file)
 		{
-			this->colorCoef = 1;
-			this->typeCoef = 1;
-			this->subtypeCoef = 1;
-			this->capacityCoef = 1;
-			this->editionCoef = 1;
-			this->influenceCoef = 1;
+			this->colorCoef = 0;
+			this->typeCoef = 0;
+			this->subtypeCoef = 0;
+			this->capacityCoef = 0;
+			this->editionCoef = 0;
+			this->influenceCoef = 0;
 
 			this->algorithm = 0;
-			
+
 			this->spellsPart = 0;
 			this->creaturesPart = 0;
 			this->mana = 0;
@@ -476,6 +483,8 @@ void Deck_builder::handleResetDeckButton()
 	ui.greenPercent->setText("0");
 	ui.creaturesPercent->setText("0");
 	ui.spellsPercent->setText("0");
+
+	ui.nbCards->setText("0");
 
 	ui.saveDeckButton->setEnabled(false);
 }

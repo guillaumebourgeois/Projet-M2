@@ -45,6 +45,14 @@ public:
 	int nbColors;
 	int colors[NB_COLORS];
 
+	// Différence entre les stats du deck actuel et la config souhaitée
+	// influence[0] = spells
+	// influence[1] = creatures
+	// influence[2] = mana
+	// influence[3-7] = colors
+	int influence[8];
+
+
 	// Deck
 	int nbCards;
 

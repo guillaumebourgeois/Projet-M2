@@ -139,10 +139,20 @@ Génération de la matrice avec couleur, edition à 1 : 5,678 s ==> 5,437 s
 
 Génération de la matrice avec couleur à 1 : 5,317 s ==> 4,425 s
 
+Ajout d'un coefficient d'influence
+
+
+Moyenne pour le nombre de couleurs et de cartes 
 
 
 
 [SOUTENANCE VENDREDI 30/03 14h]
 - Rapport écrit 
-- Soutenance orale (Présentation + démonstration)
+- Soutenance orale (Présentation + démonstration rapide avec jeu de données préparé, 2 fichiers de config différents)
 - Code
+
+[RAPPORT]
+- Différentes solutions auxquelles on a pensé
+- Algos etc 
+- Implémentation
+- Suite/Continuité
