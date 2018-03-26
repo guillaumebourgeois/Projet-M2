@@ -35,6 +35,7 @@ Deck_builder::Deck_builder(QWidget *parent)
 	this->subtypeCoef = 1;
 	this->capacityCoef = 1;
 	this->editionCoef = 1;
+	this->influenceCoef = 1;
 
 	this->algorithm = 0;
 
@@ -334,11 +335,26 @@ void Deck_builder::handleOpenConfigButton()
 
 		if (file)
 		{
+			this->colorCoef = 1;
+			this->typeCoef = 1;
+			this->subtypeCoef = 1;
+			this->capacityCoef = 1;
+			this->editionCoef = 1;
+			this->influenceCoef = 1;
+
+			this->algorithm = 0;
+			
+			this->spellsPart = 0;
+			this->creaturesPart = 0;
+			this->mana = 0;
+			this->nbColors = 0;
+
 			file >> buffer >> this->colorCoef;
 			file >> buffer >> this->typeCoef;
 			file >> buffer >> this->subtypeCoef;
 			file >> buffer >> this->capacityCoef;
 			file >> buffer >> this->editionCoef;
+			file >> buffer >> this->influenceCoef;
 
 			file >> buffer >> this->algorithm;
 

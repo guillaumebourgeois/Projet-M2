@@ -35,7 +35,8 @@ public:
 	int subtypeCoef;
 	int capacityCoef;
 	int editionCoef;
-	
+	int influenceCoef;
+
 	int algorithm;
 
 	int spellsPart;
