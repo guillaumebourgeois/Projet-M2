@@ -11,10 +11,7 @@ using namespace std;
 Deck_builder::Deck_builder(QWidget *parent)
 	: QMainWindow(parent)
 {
-	//QString url = R"(C:\Users\guill\Desktop\cards\0.jpg)";
-	//QPixmap img(url);
-
-	int i, j, k;
+	int i, j, k, size;
 
 	ui.setupUi(this);
 
@@ -25,7 +22,6 @@ Deck_builder::Deck_builder(QWidget *parent)
 
 	//this->nbCards = 0;
 
-	//ui.centralWidget->setStyleSheet("background-image: url(C:\\Users\\guill\\Desktop\\Projet-M2\\background.jpg); background-position: center;");
 	// Config initialisation
 	this->configOpened = false;
 	this->deckOpened = false;
@@ -46,6 +42,9 @@ Deck_builder::Deck_builder(QWidget *parent)
 
 	for (i = 0; i < NB_COLORS; ++i)
 		this->colors[i] = 0;
+
+	for (i = 0; i < 8; ++i)
+		this->influence[i] = 0;
 
 	// Connect buttons
 	connect(ui.openConfigButton	, SIGNAL(clicked()), this, SLOT(handleOpenConfigButton()));
@@ -134,7 +133,7 @@ void Deck_builder::setProposals()
 	switch (this->algorithm)
 	{
 		case 0:
-			proposals = this->G.heavyNeighbour(this->idsPool);
+			proposals = this->G.heavyNeighbour(this->idsPool, this->influence);
 			break;
 		case 1:
 			proposals = this->G.closestNeighbours(this->idsPool);
@@ -177,13 +176,15 @@ void Deck_builder::generateStats()
 	int i, j, id, type;
 	int creaturesU = 0, spellsU = 0;
 	int nbCards = this->idsPool.size();
+	int nbColorsU = 0;
+	int colorsU[NB_COLORS];
 
 	float mana = 0.0, creatures = 0.0, spells = 0.0;
 	float colorsPercent[5];
 
 	for (i = 0; i < NB_COLORS; ++i)
 	{
-		this->colors[i] = 0;
+		colorsU[i] = 0;
 		colorsPercent[i] = 0.0;
 	}
 
@@ -224,7 +225,10 @@ void Deck_builder::generateStats()
 		for (j = 0; j < NB_COLORS; ++j)
 		{
 			if (this->G.Cards[id].colors[j] == true)
-				++this->colors[j];
+			{
+				++colorsU[j];
+				++nbColorsU;
+			}
 		}
 	}
 
@@ -233,18 +237,26 @@ void Deck_builder::generateStats()
 	spells = (float)spellsU / (float)nbCards * 100.0;
 
 	for (i = 0; i < NB_COLORS; ++i)
-		colorsPercent[i] = (float)this->colors[i] / (float)nbCards * 100.0;
+		colorsPercent[i] = (float)colorsU[i] / (float)nbColorsU * 100.0;
 
 	// influence[0] = spells
 	// influence[1] = creatures
 	// influence[2] = mana
 	// influence[3-7] = colors
-	this->influence[0] = this->spellsPart - spells;
-	this->influence[1] = this->creaturesPart - (int)creatures;
+	this->influence[0] = round((this->spellsPart - spells) / 2);
+	this->influence[1] = round((this->creaturesPart - (int)creatures) / 2);
 	this->influence[2] = (this->mana*10) - (int)(mana*10);
 
 	for (i = 0; i < NB_COLORS; ++i)
-		this->influence[3 + i] = (100 / this->nbColors) - (int)colorsPercent[i];
+	{
+		if (this->colors[i] == 1)
+			this->influence[3 + i] = (100 / this->nbColors) - (int)colorsPercent[i];
+		else
+			this->influence[3 + i] = 0;
+	}
+
+	for (i = 0; i < 8; ++i)
+		qDebug() << this->influence[i];
 
 	ui.nbCards->setText(QString::number(nbCards));
 
@@ -256,20 +268,26 @@ void Deck_builder::generateStats()
 	ui.spellsU->setText(QString::number(spellsU));
 	ui.spellsPercent->setText(QString("%1").arg(spells, 2, 'f', 0));
 
-	ui.blackU->setText(QString::number(this->colors[0]));
-	ui.blackPercent->setText(QString("%1").arg(colorsPercent[0], 2, 'f', 0));
+	// colors[0] = blanc
+	// colors[1] = bleu
+	// colors[2] = noir
+	// colors[3] = rouge
+	// colors[4] = vert
 
-	ui.greenU->setText(QString::number(this->colors[1]));
-	ui.greenPercent->setText(QString("%1").arg(colorsPercent[1], 2, 'f', 0));
+	ui.whiteU->setText(QString::number(colorsU[0]));
+	ui.whitePercent->setText(QString("%1").arg(colorsPercent[0], 2, 'f', 0));
 
-	ui.redU->setText(QString::number(this->colors[2]));
-	ui.redPercent->setText(QString("%1").arg(colorsPercent[2], 2, 'f', 0));
+	ui.blueU->setText(QString::number(colorsU[1]));
+	ui.bluePercent->setText(QString("%1").arg(colorsPercent[1], 2, 'f', 0));
 
-	ui.blueU->setText(QString::number(this->colors[3]));
-	ui.bluePercent->setText(QString("%1").arg(colorsPercent[3], 2, 'f', 0));
+	ui.blackU->setText(QString::number(colorsU[2]));
+	ui.blackPercent->setText(QString("%1").arg(colorsPercent[2], 2, 'f', 0));
 
-	ui.whiteU->setText(QString::number(this->colors[4]));
-	ui.whitePercent->setText(QString("%1").arg(colorsPercent[4], 2, 'f', 0));
+	ui.greenU->setText(QString::number(colorsU[4]));
+	ui.greenPercent->setText(QString("%1").arg(colorsPercent[4], 2, 'f', 0));
+
+	ui.redU->setText(QString::number(colorsU[3]));
+	ui.redPercent->setText(QString("%1").arg(colorsPercent[3], 2, 'f', 0));
 }
 
 
@@ -327,14 +345,10 @@ void Deck_builder::handleOpenConfigButton()
 	ofn.lpstrFile = tmp;
 	ofn.nMaxFile = 1024;
 	ofn.lpstrTitle = _T("Deck Builder");
-	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
 	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
 	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
 
 	res = GetOpenFileName(&ofn);
-	//int res = GetSaveFileName(&ofn); 
-	//printf("Code de sortie : %d\n", res);
-	//convert_multiple(ofn.lpstrFile);
 
 	if (ofn.lpstrFile != nullptr)
 	{
@@ -369,6 +383,11 @@ void Deck_builder::handleOpenConfigButton()
 			file >> buffer >> this->creaturesPart;
 			file >> buffer >> this->mana;
 
+			// colors[0] = blanc
+			// colors[1] = bleu
+			// colors[2] = noir
+			// colors[3] = rouge
+			// colors[4] = vert
 			for (i = 0; i < NB_COLORS; ++i)
 			{
 				file >> buffer >> this->colors[i];
@@ -395,15 +414,7 @@ void Deck_builder::handleInitiateButton()
 
 	this->G = Graph();
 	this->G.createCards();
-
-	start = clock();
 	this->G.createEdges(this->colorCoef, this->typeCoef, this->subtypeCoef, this->capacityCoef, this->editionCoef);
-	qDebug() << "Génération de matrice : " << clock() - start;
-	//start = clock();
-	//this->G.writeMatrix();
-	//qDebug() << "Enregistrement de la matrice : " << clock() - start;
-	//this->G.readMatrix();
-	//qDebug() << "Lecture de la matrice : " << clock() - start;
 	
 	ui.openDeckButton->setEnabled(true);
 }
@@ -439,9 +450,9 @@ void Deck_builder::handleOpenDeckButton()
 		for (i = 0; i < this->buttons.size(); ++i)
 			this->buttons[i]->setEnabled(true);
 
-		this->setProposals();
-
 		this->generateStats();
+
+		this->setProposals();
 
 		ui.saveDeckButton->setEnabled(true);
 	}

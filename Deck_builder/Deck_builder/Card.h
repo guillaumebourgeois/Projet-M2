@@ -22,7 +22,6 @@ public:
 	std::vector<__int8>  types;
 	std::vector<__int16> subtypes;
 	std::vector<__int8>  capacities;
-	//int popularity;
 
 	Card();
 	Card(int, std::string);

@@ -43,6 +43,12 @@ public:
 	int creaturesPart;
 	int mana;
 	int nbColors;
+
+	// colors[0] = blanc
+	// colors[1] = bleu
+	// colors[2] = noir
+	// colors[3] = rouge
+	// colors[4] = vert
 	int colors[NB_COLORS];
 
 	// Différence entre les stats du deck actuel et la config souhaitée

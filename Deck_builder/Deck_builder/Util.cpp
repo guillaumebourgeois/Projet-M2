@@ -27,14 +27,10 @@ vector<int> readFile()
 	ofn.lpstrFile = tmp;
 	ofn.nMaxFile = 1024;
 	ofn.lpstrTitle = _T("Deck Builder");
-	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
 	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
 	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
 
 	res = GetOpenFileName(&ofn);
-	//int res = GetSaveFileName(&ofn); 
-	//printf("Code de sortie : %d\n", res);
-	//convert_multiple(ofn.lpstrFile);
 
 	if (ofn.lpstrFile != nullptr)
 	{
@@ -110,15 +106,10 @@ void writeFile(vector<int> ids)
 	ofn.lpstrFile = tmp;
 	ofn.nMaxFile = 1024;
 	ofn.lpstrTitle = _T("Deck Builder");
-	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
 	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
 	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
 
-											  //res = GetOpenFileName(&ofn);
 	res = GetSaveFileName(&ofn);
-	//printf("Code de sortie : %d\n", res);
-	//convert_multiple(ofn.lpstrFile);
-
 	if (ofn.lpstrFile != nullptr)
 	{
 		ofstream file(ofn.lpstrFile, ios::out | ios::trunc);

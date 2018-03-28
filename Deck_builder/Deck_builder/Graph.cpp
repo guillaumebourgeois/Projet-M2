@@ -174,9 +174,8 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 
 	bitset<5> nbCommonsBits;
 	int nbColorc1, nbColorc2, commons;
-	int i, j, k, l, m, ind;
+	int i, j, k, l, m;
 	int colorValue, editionValue, typeValue, capacityValue, subtypeValue, totalValue;
-	//int maxTypeValue = 0, maxSubtypeValue = 0, maxCapacityValue = 0, maxTotalValue = 0;
 
 	int n = this->nbCards;
 
@@ -327,8 +326,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 	for (i = 0; i < n; ++i) {
 		m = i * n;
 
-		ind = i + i + 1;
-		//for (j = i + 1; j < n; ++j) {
 		for (j = 0; j < n; ++j) {
 				// COLORS
 				colorValue = 0;
@@ -390,8 +387,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++subtypeValue;
 						}
 					}
-					//if (subtypeValue > maxSubtypeValue)
-						//maxSubtypeValue = subtypeValue;
 				}
 
 				// TYPES
@@ -406,8 +401,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++typeValue;
 						}
 					}
-					//if (typeValue > maxTypeValue)
-						//maxTypeValue = typeValue;
 				}
 
 				// CAPACITIES
@@ -422,8 +415,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 								++capacityValue;
 						}
 					}
-					//if (capacityValue > maxCapacityValue)
-						//maxCapacityValue = capacityValue;
 				}
 				// TOTAL
 
@@ -434,36 +425,29 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 					subtypeValue	* subtypeCoef	+
 					capacityValue	* capacityCoef	;
 
-				//if (totalValue > maxTotalValue)
-					//maxTotalValue = totalValue;
-
-				//if (results.find(totalValue) == results.end())
-					//results.insert(pair<int, int>(totalValue, 1));
-				//else
-					//++results[totalValue];
+				if (results.find(totalValue) == results.end())
+					results.insert(pair<int, int>(totalValue, 1));
+				else
+					++results[totalValue];
 
 				this->Edges[m + j] = totalValue;
-				//this->Edges[ind] = totalValue;
-				//ind += n;
 		}
 	}
-	//map<int, int>::iterator it;
-	//for (it = results.begin(); it != results.end(); ++it)
-		//qDebug() << it->first << " " << it->second << endl;*/
 
 	for (i = 0; i < n; ++i)
 		this->Edges[i * n + i] = 0;
-}
 
-void Graph::printGraph()
-{
-	/*for (int i = 0; i < this->Edges.size(); ++i) {
-		//cout << "Carte 1 : " << this->edges[i].idCard1 << " ; Carte 2 : " << this->edges[i].idCard2 << " ; Valeur : " << this->edges[i].colorValue << endl;
-		//cout << unsigned(this->Edges[i].totalValue) << " ";
+	map<int, int>::iterator it;
+	ofstream file("histogramme.txt", ios::out | ios::trunc);
+	if (file)
+	{
+		for (it = results.begin(); it != results.end(); ++it)
+			file << it->first << " " << it->second << endl;
+
+		file.close();
 	}
-
-	//cout << "nbCards : " << this->nbCards << endl;
-	//cout << "Total : " << (int)this->Edges.size() << " liens." << endl;*/
+	else
+		qDebug() << "Erreur lors de l'ouverture du fichier !";
 }
 
 // Resolution algorithms 
@@ -473,7 +457,7 @@ Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std
 
 }
 
-multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool /*influenceCoef, int[]*/)
+multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool, int influences[])
 {
 	int i, j, k;
 
@@ -481,6 +465,7 @@ multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool /*influenceCoe
 
 	vector<int> idsPool;
 	vector<int> cards;
+	vector<int> orientation;
 
 	map<int, multimap<int, int>> neighbors;
 	map<int, multimap<int, int>>::iterator itneighbors;
@@ -515,17 +500,57 @@ multimap<int, int> Graph::heavyNeighbour(vector<int> &cardIdsPool /*influenceCoe
 			cards.push_back(i);
 	}
 
+	// influence[0] = spells
+	// influence[1] = creatures
+	// influence[2] = mana
+	// influence[3-7] = colors
+
+	// Orientation de l'algo
+	orientation.resize(cards.size());
+	for (i = 0; i < cards.size(); ++i)
+	{
+		orientation[i] = 0;
+		for (j = 0; j < NB_COLORS; j++)
+		{
+			if (this->Cards[cards[i]].colors[j] == true)
+				orientation[i] += influences[3 + j];
+		}
+		
+		found = false;
+		for (j = 0; j < this->Cards[cards[i]].types.size() && found == false; ++j)
+		{
+			switch (this->Cards[cards[i]].types[j])
+			{
+			case 3:
+				orientation[i] += influences[1];
+				break;
+			case 5:
+				orientation[i] += influences[0];
+				found = true;
+				break;
+			case 6:
+				orientation[i] += influences[0];
+				found = true;
+				break;
+			case 7:
+				orientation[i] += influences[0];
+				found = true;
+				break;
+			case 14:
+				orientation[i] += influences[0];
+				found = true;
+				break;
+			}
+		}
+	}
+
 	// Remplissage des voisins
 	for (i = 0; i < idsPool.size(); ++i)
 	{
 		for (j = 0; j < cards.size(); ++j)
 		{
 			// Pour chaque carte donnée on insert ses voisins dans la multimap avec une paire <poids, id du voisin>
-			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]], cards[j]));
-
-			// Orientation de l'algo
-
-
+			neighbors[idsPool[i]].insert(pair<int, int>(this->Edges[idsPool[i] * this->nbCards + cards[j]] + orientation[j], cards[j]));		
 		}
 	}
 
@@ -655,107 +680,6 @@ multimap<int, int> Graph::closestNeighbours(vector<int> cardIdsPool)
 		proposals.insert(pair<int, int>(it->second, this->Ids.left.at(it->first)));
 
 	return proposals;
-}
-
-void Graph::writeMatrix()
-{
-	int res, i, j, n;
-
-	/*OPENFILENAME ofn;
-	TCHAR tmp[1024];
-	tmp[0] = '\0';
-
-	ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
-
-	ofn.lStructSize = sizeof(OPENFILENAMEW);
-	ofn.lpstrFile = tmp;
-	ofn.nMaxFile = 1024;
-	ofn.lpstrTitle = _T("Deck Builder");
-	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
-	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
-	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
-
-											  //res = GetOpenFileName(&ofn);
-	res = GetSaveFileName(&ofn);
-	//printf("Code de sortie : %d\n", res);
-	//convert_multiple(ofn.lpstrFile);
-
-	if (ofn.lpstrFile != nullptr)
-	{
-		_tprintf(_T("Enregistrement dans le fichier fichier : %s\n"), ofn.lpstrFile);
-
-		ofstream file(ofn.lpstrFile, ios::out | ios::trunc);
-		*/
-
-	ofstream file("mat1.txt", ios::out | ios::trunc);
-		if (file)
-		{
-			n = this->nbCards;
-			
-			file << n << endl;
-
-			for (i = 0; i < n; ++i)
-			{
-				for (j = 0; j < n; ++j)
-					file << to_string(this->Edges[i * n + j]);
-				file << endl;
-			}
-			file.close();
-		}
-		else
-			qDebug() << "Erreur lors de l'ouverture du fichier !" << endl;
-	//}
-}
-
-void Graph::readMatrix()
-{
-	int res, i, j, n;
-
-	/*OPENFILENAME ofn;
-	TCHAR tmp[1024];
-	tmp[0] = '\0';
-
-	ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
-
-	ofn.lStructSize = sizeof(OPENFILENAMEW);
-	ofn.lpstrFile = tmp;
-	ofn.nMaxFile = 1024;
-	ofn.lpstrTitle = _T("Deck Builder");
-	//ofn.lpstrFilter = _T("Tous (*.*)\0*.*\0Textes (*.txt)\0*.TXT\0");
-	ofn.lpstrFilter = _T("(*.txt)\0*.TXT\0");
-	ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER; // | OFN_ALLOWMULTISELECT  ;
-
-	res = GetOpenFileName(&ofn);
-	//int res = GetSaveFileName(&ofn); 
-	//printf("Code de sortie : %d\n", res);
-	//convert_multiple(ofn.lpstrFile);
-
-	if (ofn.lpstrFile != nullptr)
-	{
-		_tprintf(_T("Ouverture du fichier : %s\n"), ofn.lpstrFile);
-	
-		ifstream file(ofn.lpstrFile, ios::in);*/
-
-		ifstream file("mat1.txt", ios::in);
-
-		if (file)
-		{
-			file >> (int)n;
-			this->nbCards = n;
-			this->Edges.clear();
-			this->Edges.resize(n * n);
-
-			for (i = 0; i < n; ++i)
-			{
-				for (j = 0; j < n; ++j)
-					file >> (__int8)this->Edges[i * n + j];
-			}
-
-			file.close();
-		}
-		else
-			qDebug() << "Erreur lors de l'ouverture du fichier" << endl;
-	//}
 }
 
 Graph::~Graph()
