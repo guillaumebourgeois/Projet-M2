@@ -244,19 +244,20 @@ void Deck_builder::generateStats()
 	// influence[2] = mana
 	// influence[3-7] = colors
 	this->influence[0] = round((this->spellsPart - spells) / 2);
+	if (this->influence[0] < 0)
+		this->influence[0] = 0;
 	this->influence[1] = round((this->creaturesPart - (int)creatures) / 2);
+	if (this->influence[1] < 0)
+		this->influence[1] = 0;
 	this->influence[2] = (this->mana*10) - (int)(mana*10);
 
 	for (i = 0; i < NB_COLORS; ++i)
 	{
 		if (this->colors[i] == 1)
-			this->influence[3 + i] = (100 / this->nbColors) - (int)colorsPercent[i];
+			this->influence[3 + i] = round(((100 / this->nbColors) - (int)colorsPercent[i]) / 3);
 		else
 			this->influence[3 + i] = 0;
 	}
-
-	for (i = 0; i < 8; ++i)
-		qDebug() << this->influence[i];
 
 	ui.nbCards->setText(QString::number(nbCards));
 
