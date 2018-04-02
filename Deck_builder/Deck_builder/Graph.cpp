@@ -451,7 +451,6 @@ void Graph::createEdges(int colorCoef, int editionCoef, int typeCoef, int subtyp
 }
 
 // Resolution algorithms 
-
 Card* usingDynamicGraph(std::vector<Card> cards, std::vector<Card> allCards, std::vector<__int8> matrix, boost::bimap<int, int> ids)
 {
 
